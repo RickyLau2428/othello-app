@@ -5,11 +5,12 @@ import static model.State.*;
 // Holds information for each game piece on the board (i.e. its position and current status)
 public class GamePiece {
     private State state;
-    private int position;
+    private final int position;
 
     // EFFECTS: Initializes a game piece with the given state and position
     public GamePiece(int position, State state) {
-
+        this.position = position;
+        this.state = state;
     }
 
     // getters:
@@ -28,7 +29,7 @@ public class GamePiece {
 
     // MODIFIES: this
     // EFFECTS: Changes this.state from BLACK to WHITE or vice versa. Does nothing
-    //          if this.state is EMPTY.
+    //          if state is EMPTY.
     public void flip() {
         if (state.equals(BLACK)) {
             state = WHITE;
