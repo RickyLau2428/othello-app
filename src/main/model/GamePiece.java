@@ -8,7 +8,7 @@ public class GamePiece {
     private int position;
 
     // EFFECTS: Initializes a game piece with the given state and position
-    public GamePiece() {
+    public GamePiece(int position, State state) {
 
     }
 
