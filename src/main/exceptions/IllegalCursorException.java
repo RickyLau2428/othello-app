@@ -1,4 +1,4 @@
 package exceptions;
 
-public class IllegalCursorException extends Exception {
+public class IllegalCursorException extends RuntimeException {
 }

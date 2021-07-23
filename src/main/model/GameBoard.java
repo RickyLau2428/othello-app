@@ -58,7 +58,7 @@ public class GameBoard {
     }
 
     public boolean isGameOver() {
-        return this.isGameOver;
+        return isGameOver;
     }
 
     // setters:
@@ -148,18 +148,13 @@ public class GameBoard {
     //          value is a set of GamePieces that are flipped on a potential play. Sets validMoves to be empty
     //          if there are no valid moves.
     public void setValidMoves() {
+        // Clears validMoves for every new board state
         validMoves = new HashMap<>();
 
         for (GamePiece piece : board) {
-            if (piece.getState().equals(EMPTY) || !(piece.getState().equals(turn))) {
-                continue;
-            } else {
-                try {
-                    cursor.setPosition(piece.getPosition());
-                    checkAllDirections(turn);
-                } catch (IllegalCursorException e) {
-                    cursor.reset();
-                }
+            if (piece.getState().equals(turn)) {
+                cursor.setPosition(piece.getPosition());
+                checkAllDirections(turn);
             }
         }
     }
@@ -167,39 +162,45 @@ public class GameBoard {
     // MODIFIES: this
     // EFFECTS: Checks in all directions  and modifies validMoves as needed
     private void checkAllDirections(State turn) {
-        for (int i = 0; i <= 8; i++) {
-            checkDirections(turn, i);
+        for (int i = 1; i <= 8; i++) {
+            checkDirection(turn, i);
         }
     }
 
     // MODIFIES: this
     // EFFECTS: Checks all pieces leading from cursor and adds any valid positions to validMoves
-    public void checkDirections(State turn, int direction) {
+    public void checkDirection(State turn, int direction) {
         try {
             List<GamePiece> potentialFlips = new ArrayList<>();
             moveCursorDirection(direction);
             GamePiece toCheck = board.get(cursor.getCurrent());
 
+            // The entry being checked must be of the opposite state
             while (!(toCheck.getState().equals(turn)) && !(toCheck.getState().equals(EMPTY))) {
                 potentialFlips.add(toCheck);
                 moveCursorDirection(direction);
                 toCheck = board.get(cursor.getCurrent());
             }
 
+            // The entry being checked must hold an empty piece, and there are opposing pieces that would be flipped
+            // if a piece is placed at that entry
             if (toCheck.getState().equals(EMPTY) && !(potentialFlips.isEmpty())) {
                 if (validMoves.containsKey(toCheck.getPosition())) {
+                    // Adds the potential flips to the corresponding key if it already exists in validMoves
                     validMoves.get(toCheck.getPosition()).addAll(potentialFlips);
                 } else {
+                    // Adds a key-value pair to validMoves if the key does not already exist
                     validMoves.put(toCheck.getPosition(), potentialFlips);
                 }
             }
+            // Resets the cursor for the next iteration of checkDirections
             cursor.reset();
         } catch (IllegalCursorException e) {
             cursor.reset();
         }
     }
 
-    // MODIFIES: cursor
+    // MODIFIES: this
     // EFFECTS: Calls the appropriate cursor movement method based on dir (1 calls moveCursorRight, moving
     //          clockwise, such that 8 will call moveCursorUpperRight)
     private void moveCursorDirection(int dir) throws IllegalCursorException {
@@ -208,26 +209,36 @@ public class GameBoard {
                 cursor.moveCursorRight();
                 break;
             case 2:
-                cursor.moveCursorLowerRight();
-                break;
-            case 3:
                 cursor.moveCursorDown();
                 break;
-            case 4:
-                cursor.moveCursorLowerLeft();
-                break;
-            case 5:
+            case 3:
                 cursor.moveCursorLeft();
                 break;
-            case 6:
-                cursor.moveCursorUpperLeft();
-                break;
-            case 7:
+            case 4:
                 cursor.moveCursorUp();
                 break;
-            case 8:
+            default:
+                moveCursorDirectionDiagonal(dir);
+
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Calls the appropriate cursor movement method based on dir (only called on diagonal
+    //          directions).
+    private void moveCursorDirectionDiagonal(int dir) throws IllegalCursorException {
+        switch (dir) {
+            case 5:
+                cursor.moveCursorLowerRight();
+                break;
+            case 6:
+                cursor.moveCursorLowerLeft();
+                break;
+            case 7:
                 cursor.moveCursorUpperRight();
                 break;
+            case 8:
+                cursor.moveCursorUpperLeft();
         }
     }
 }
