@@ -13,7 +13,7 @@ public class GamePiece {
         this.state = state;
     }
 
-    // getters:
+    // getters
     public int getPosition() {
         return this.position;
     }
@@ -22,7 +22,7 @@ public class GamePiece {
         return this.state;
     }
 
-    // setters:
+    // setters
     public void setState(State state) {
         this.state = state;
     }

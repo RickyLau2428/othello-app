@@ -17,12 +17,12 @@ heard of it to veteran players. As long as you have two players (or maybe just o
 against yourself), this application will satisfy *most* of your Othello needs.
 
 ## Why Othello?
-I was inspired to design my project around Othello by watching gameplay on YouTube. To be completely frank, I have 
-never played the game before, but I felt that it translated into a program fairly well and would be fun to implement.
+I was inspired to design my project around Othello by watching gameplay on YouTube. To be completely frank, I've never 
+played the game before, but I felt that it translated into a program fairly well and would be fun to implement.
 
 
 ## User Stories
-* As a user, I want to be able to place a piece on the board
-* As a user, I want to be able to capture opponent pieces
+* As a user, I want to be able to place a piece on the board, thus capturing opponent pieces
 * As a user, I want to be able to start an Othello game with the correct starting configuration
 * As a user, I want to be able to end a game of Othello and determine who the superior Othello player is.
+* As a user, I want to be able to see the final score of an Othello match.

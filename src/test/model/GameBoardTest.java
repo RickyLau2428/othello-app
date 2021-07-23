@@ -1,8 +1,10 @@
 package model;
 
+import exceptions.IllegalPlayerInputException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static model.GameBoard.*;
 import static model.State.*;
 import static model.State.EMPTY;
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,10 +26,88 @@ public class GameBoardTest {
         testBoard.setUpGame();
         assertEquals(BLACK, testBoard.getTurn());
 
-        assertEquals(WHITE, getPieceState(27));
-        assertEquals(BLACK, getPieceState(28));
-        assertEquals(BLACK, getPieceState(35));
-        assertEquals(WHITE, getPieceState(36));
+        assertEquals(BLACK, getPieceState(Q1));
+        assertEquals(WHITE, getPieceState(Q2));
+        assertEquals(BLACK, getPieceState(Q3));
+        assertEquals(WHITE, getPieceState(Q4));
+    }
+
+    @Test
+    public void testPrepareInputChangeNothingThrown() {
+        try {
+            assertEquals("A5", testBoard.sanitizeInput("a5"));
+        } catch (IllegalPlayerInputException e) {
+            fail("Exception not expected.");
+        }
+    }
+
+    @Test
+    public void testPrepareInputNoChangeNothingThrown() {
+        try {
+            assertEquals("B8", testBoard.sanitizeInput("B8"));
+        } catch (IllegalPlayerInputException e) {
+            fail("Exception not expected.");
+        }
+    }
+
+    @Test
+    public void testPrepareInputLengthException() {
+        try {
+            testBoard.sanitizeInput("test");
+            fail("Exception not thrown.");
+        } catch (IllegalPlayerInputException e) {
+
+        }
+    }
+
+    @Test
+    public void testTranslateInputNoExceptions() {
+        assertEquals(52, testBoard.translateInput("E7"));
+    }
+
+    @Test
+    public void testTranslateInputExceptionThrown() {
+        assertEquals(-1, testBoard.translateInput("AJ"));
+    }
+
+    @Test
+    public void testPrepareInputFirstCharLesserException() {
+        try {
+            testBoard.sanitizeInput("@5");
+            fail("Exception not thrown.");
+        } catch (IllegalPlayerInputException e) {
+
+        }
+    }
+
+    @Test
+    public void testPrepareInputFirstCharGreaterException() {
+        try {
+            testBoard.sanitizeInput("~6");
+            fail("Exception not thrown.");
+        } catch (IllegalPlayerInputException e) {
+
+        }
+    }
+
+    @Test
+    public void testPrepareInputSecondCharLesserException() {
+        try {
+            testBoard.sanitizeInput("A0");
+            fail("Exception not thrown.");
+        } catch (IllegalPlayerInputException e) {
+
+        }
+    }
+
+    @Test
+    public void testPrepareInputSecondCharGreaterException() {
+        try {
+            testBoard.sanitizeInput("AJ");
+            fail("Exception not thrown.");
+        } catch (IllegalPlayerInputException e) {
+
+        }
     }
 
     @Test
@@ -52,7 +132,7 @@ public class GameBoardTest {
 
     @Test
     public void testPlacePieceFullBoardFailure() {
-        for (int i = 0; i <= 63; i++) {
+        for (int i = 0; i < BOARD_SIZE; i++) {
             setPiece(i, BLACK);
         }
         testBoard.setTurn(BLACK);
@@ -371,9 +451,12 @@ public class GameBoardTest {
         for (int i = 31; i <= 63; i += 8) {
             setPiece(i, WHITE);
         }
+        // Simulates turn passing
         testBoard.setTurn(BLACK);
         assertFalse(testBoard.checkAnyValidMoves());
         assertTrue(testBoard.checkAnyValidMoves());
+        testBoard.setGameOverCounter(0);
+        assertEquals(0, testBoard.getGameOverCounter());
     }
 
     @Test

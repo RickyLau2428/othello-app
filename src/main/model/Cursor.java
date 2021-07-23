@@ -2,6 +2,9 @@ package model;
 
 import exceptions.IllegalCursorException;
 
+import static model.GameBoard.BOARD_SIZE;
+import static model.GameBoard.SIDE_LENGTH;
+
 // Handles movement through the board
 public class Cursor {
     private int original;
@@ -29,7 +32,7 @@ public class Cursor {
     // MODIFIES: this
     // EFFECTS: Sets both this.original and this.current to position
     public void setPosition(int position) throws IllegalCursorException {
-        if (!(0 <= position && position < 64)) {
+        if (!(0 <= position && position < BOARD_SIZE)) {
             throw new IllegalCursorException();
         }
         original = position;
@@ -43,39 +46,43 @@ public class Cursor {
     }
 
     // MODIFIES: this
-    // EFFECTS: Moves the cursor to the right by one unit
+    // EFFECTS: Moves the cursor to the right by one unit and throws an IllegalCursorException
+    //          if it attempts to move to the next row or outside the bounds of the board
     public void moveCursorRight() throws IllegalCursorException {
         int newPosition = current + 1;
-        if (newPosition > 63 || (newPosition % 8 == 0)) {
+        if (newPosition >= BOARD_SIZE || (newPosition % SIDE_LENGTH == 0)) {
             throw new IllegalCursorException();
         }
         current = newPosition;
     }
 
     // MODIFIES: this
-    // EFFECTS: Moves the cursor to the left by one unit
+    // EFFECTS: Moves the cursor to the left by one unit and throws an IllegalCursorException if
+    //          it attempts to move to the row above or outside the bounds of the board
     public void moveCursorLeft() throws IllegalCursorException {
         int newPosition = current - 1;
-        if (newPosition < 0 || (newPosition % 8 == 7)) {
+        if (newPosition < 0 || (newPosition % SIDE_LENGTH == (SIDE_LENGTH - 1))) {
             throw new IllegalCursorException();
         }
         current = newPosition;
     }
 
     // MODIFIES: this
-    // EFFECTS: Moves the cursor down by one unit
+    // EFFECTS: Moves the cursor down by one unit and throws an IllegalCursorException if
+    //          it attempts to move outside the bounds of the board
     public void moveCursorDown() throws IllegalCursorException {
-        int newPosition = current + 8;
-        if (newPosition >= 64) {
+        int newPosition = current + SIDE_LENGTH;
+        if (newPosition >= BOARD_SIZE) {
             throw new IllegalCursorException();
         }
         current = newPosition;
     }
 
     // MODIFIES: this
-    // EFFECTS: Moves the cursor up by one unit
+    // EFFECTS: Moves the cursor up by one unit and throws an IllegalCursorException if
+    //          it attempts to move outside the bounds of the board
     public void moveCursorUp() throws IllegalCursorException {
-        int newPosition = current - 8;
+        int newPosition = current - SIDE_LENGTH;
         if (newPosition < 0) {
             throw new IllegalCursorException();
         }
@@ -83,28 +90,32 @@ public class Cursor {
     }
 
     // MODIFIES: this
-    // EFFECTS: Moves the cursor to the adjacent upper right corner
+    // EFFECTS: Moves the cursor to the adjacent upper right corner and throws an IllegalCursorException
+    //          if it attempts to move outside the bounds of the board
     public void moveCursorUpperRight() throws IllegalCursorException {
         moveCursorUp();
         moveCursorRight();
     }
 
     // MODIFIES: this
-    // EFFECTS: Moves the cursor to the adjacent bottom right corner
+    // EFFECTS: Moves the cursor to the adjacent bottom right corner and throws an IllegalCursorException
+    //          if it attempts to move outside the bounds of the board
     public void moveCursorLowerRight() throws IllegalCursorException {
         moveCursorDown();
         moveCursorRight();
     }
 
     // MODIFIES: this
-    // EFFECTS: Moves the cursor to the adjacent upper left corner
+    // EFFECTS: Moves the cursor to the adjacent upper left corner and throws an IllegalCursorException
+    //          if it attempts to move outside the bounds of the board
     public void moveCursorUpperLeft() throws IllegalCursorException {
         moveCursorUp();
         moveCursorLeft();
     }
 
     // MODIFIES: this
-    // EFFECTS: Moves the cursor to the adjacent lower left corner
+    // EFFECTS: Moves the cursor to the adjacent lower left corner and throws an IllegalCursorException
+    //          if it attempts to move outside the bounds of the board
     public void moveCursorLowerLeft() throws IllegalCursorException {
         moveCursorDown();
         moveCursorLeft();

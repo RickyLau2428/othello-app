@@ -1,14 +1,24 @@
 package model;
 
 import exceptions.IllegalCursorException;
+import exceptions.IllegalPlayerInputException;
+
 import java.util.*;
 
 import static model.State.*;
 
+// Translates player input and processes game rules
 public class GameBoard {
-    public static final int COLUMNS = 8;
-    public static final int ROWS = 8;
-    public static final int BOARD_SIZE = COLUMNS * ROWS;
+    // INVARIANT: SIDE_LENGTH must be 8
+    public static final int SIDE_LENGTH = 8;
+    public static final int BOARD_SIZE = SIDE_LENGTH * SIDE_LENGTH;
+    public static final int MARGIN = SIDE_LENGTH / 2 - 1;
+    // Q1 through Q4 are the corners closest to the origin on a board with length SIDE_LENGTH corresponding
+    // to their quadrants
+    public static final int Q1 = (SIDE_LENGTH * MARGIN) + (MARGIN + 1);
+    public static final int Q2 = (SIDE_LENGTH * MARGIN) + MARGIN;
+    public static final int Q3 = (SIDE_LENGTH * (MARGIN + 1)) + MARGIN;
+    public static final int Q4 = (SIDE_LENGTH * (MARGIN + 1)) + (MARGIN + 1);
 
     private List<GamePiece> board;
     private State turn;
@@ -22,7 +32,7 @@ public class GameBoard {
     // EFFECTS: Constructs a new game board in the starting configuration (black goes first)
     public GameBoard() {
         board = new LinkedList<>();
-        for (int i = 0; i <= 63; i++) {
+        for (int i = 0; i < BOARD_SIZE; i++) {
             board.add(new GamePiece(i, EMPTY));
         }
         setUpGame();
@@ -61,23 +71,31 @@ public class GameBoard {
         return isGameOver;
     }
 
-    // setters:
+    public int getGameOverCounter() {
+        return gameOverCounter;
+    }
+
+    // setters
     public void setTurn(State state) {
         this.turn = state;
         setValidMoves();
     }
 
-    // MODIFIES: this
-    // EFFECTS: Sets up the board in the starting configuration
-    public void setUpGame() {
-        board.get(27).setState(WHITE);
-        board.get(28).setState(BLACK);
-        board.get(35).setState(BLACK);
-        board.get(36).setState(WHITE);
+    public void setGameOverCounter(int num) {
+        this.gameOverCounter = 0;
     }
 
     // MODIFIES: this
-    // EFFECTS: Counts the total number of black and white pieces on the board.
+    // EFFECTS: Sets up the board in the starting configuration
+    public void setUpGame() {
+        board.get(Q1).setState(BLACK);
+        board.get(Q2).setState(WHITE);
+        board.get(Q3).setState(BLACK);
+        board.get(Q4).setState(WHITE);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Counts the total number of black and white pieces on the board and updates fields.
     //          Returns the winner of the match, or EMPTY if it is a tie.
     public State endGame() {
         for (GamePiece piece : board) {
@@ -102,6 +120,33 @@ public class GameBoard {
         if (gameOverCounter == 2) {
             isGameOver = true;
         }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Translates a player input command to the appropriate position
+    //          on the board. Returns -1 if the input is invalid
+    public int translateInput(String input) {
+        try {
+            String toTranslate = sanitizeInput(input);
+            int letter = toTranslate.charAt(0) - 'A';
+            int num = 8 * (toTranslate.charAt(1) - '1');
+            return letter + num;
+        } catch (IllegalPlayerInputException e) {
+            System.out.println("Player input did not match requirements. Please try again.");
+            return -1;
+        }
+    }
+
+    // EFFECTS: Checks strings for appropriate conditions and processes it for later translation.
+    //          Throws an IllegalPlayerInputException if input is invalid.
+    public String sanitizeInput(String input) throws IllegalPlayerInputException {
+        String processed = input.toUpperCase();
+        if (processed.length() != 2
+                || (processed.charAt(0) < 'A' || processed.charAt(0) > 'H')
+                || (processed.charAt(1) < '1' || processed.charAt(1) > '8')) {
+            throw new IllegalPlayerInputException();
+        }
+        return processed;
     }
 
     // MODIFIES: this
@@ -160,7 +205,7 @@ public class GameBoard {
     }
 
     // MODIFIES: this
-    // EFFECTS: Checks in all directions  and modifies validMoves as needed
+    // EFFECTS: Checks in all directions and modifies validMoves as needed
     private void checkAllDirections(State turn) {
         for (int i = 1; i <= 8; i++) {
             checkDirection(turn, i);
@@ -168,7 +213,8 @@ public class GameBoard {
     }
 
     // MODIFIES: this
-    // EFFECTS: Checks all pieces leading from cursor and adds any valid positions to validMoves
+    // EFFECTS: Checks all pieces leading from cursor and adds any valid moves to validMoves. Resets the cursor
+    //          if it attempts to move illegally
     public void checkDirection(State turn, int direction) {
         try {
             List<GamePiece> potentialFlips = new ArrayList<>();
