@@ -456,6 +456,8 @@ public class GameBoardTest {
         assertFalse(testBoard.checkAnyValidMoves());
         assertTrue(testBoard.checkAnyValidMoves());
         testBoard.setGameOverCounter(0);
+        testBoard.checkGameOver();
+        assertFalse(testBoard.isGameOver());
         assertEquals(0, testBoard.getGameOverCounter());
     }
 
@@ -481,10 +483,10 @@ public class GameBoardTest {
 
     @Test
     public void testEndGameWhiteVictory() {
-        for (int i = 0; i <= 45; i++) {
+        for (int i = 0; i <= 23; i++) {
             setPiece(i, WHITE);
         }
-        for (int i = 46; i <= 63; i++) {
+        for (int i = 24; i <= 56; i += 8) {
             setPiece(i, BLACK);
         }
         // Simulates turn passing
@@ -495,16 +497,16 @@ public class GameBoardTest {
         testBoard.checkGameOver();
         assertTrue(testBoard.isGameOver());
         assertEquals(WHITE, testBoard.endGame());
-        assertEquals(46, testBoard.getWhitePieceCount());
-        assertEquals(18, testBoard.getBlackPieceCount());
+        assertEquals(24, testBoard.getWhitePieceCount());
+        assertEquals(5, testBoard.getBlackPieceCount());
     }
 
     @Test
     public void testEndGameBlackVictory() {
-        for (int i = 0; i <= 45; i++) {
+        for (int i = 0; i <= 23; i++) {
             setPiece(i, BLACK);
         }
-        for (int i = 46; i <= 63; i++) {
+        for (int i = 31; i <= 63; i += 8) {
             setPiece(i, WHITE);
         }
         // Simulates turn passing
@@ -515,8 +517,8 @@ public class GameBoardTest {
         testBoard.checkGameOver();
         assertTrue(testBoard.isGameOver());
         assertEquals(BLACK, testBoard.endGame());
-        assertEquals(46, testBoard.getBlackPieceCount());
-        assertEquals(18, testBoard.getWhitePieceCount());
+        assertEquals(24, testBoard.getBlackPieceCount());
+        assertEquals(5, testBoard.getWhitePieceCount());
     }
 
     // EFFECTS: Places pieces on the test board regardless of game rules

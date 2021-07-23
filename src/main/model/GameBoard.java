@@ -21,6 +21,7 @@ public class GameBoard {
     public static final int Q4 = (SIDE_LENGTH * (MARGIN + 1)) + (MARGIN + 1);
 
     private List<GamePiece> board;
+    // INVARIANT: turn is either BLACK or WHITE
     private State turn;
     private HashMap<Integer, List<GamePiece>> validMoves;
     private Cursor cursor;
@@ -166,7 +167,7 @@ public class GameBoard {
     public void nextTurn() {
         if (turn.equals(BLACK)) {
             turn = WHITE;
-        } else if (turn.equals(WHITE)) {
+        } else {
             turn = BLACK;
         }
         setValidMoves();
