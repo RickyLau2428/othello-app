@@ -1,6 +1,7 @@
 package model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import static model.State.*;
@@ -10,9 +11,9 @@ public class GameBoard {
     public static final int ROWS = 8;
     public static final int BOARD_SIZE = COLUMNS * ROWS;
 
-    private Set<GamePiece> board;
+    private List<GamePiece> board;
     private State turn;
-    private HashMap<Integer, Set<GamePiece>> validMoves;
+    private HashMap<Integer, List<GamePiece>> validMoves;
     private Cursor cursor;
     private boolean isGameOver;
     private int whitePieceCount;
@@ -25,11 +26,11 @@ public class GameBoard {
     }
 
     // getters
-    public Set<GamePiece> getBoard() {
+    public List<GamePiece> getBoard() {
         return this.board;
     }
 
-    public HashMap<Integer, Set<GamePiece>> getValidMoves() {
+    public HashMap<Integer, List<GamePiece>> getValidMoves() {
         return this.validMoves;
     }
 
@@ -50,7 +51,7 @@ public class GameBoard {
     }
 
     // setters:
-    public void setTurn() {
+    public void setTurn(State state) {
     }
 
     // MODIFIES: this
@@ -93,7 +94,7 @@ public class GameBoard {
     // MODIFIES: this
     // EFFECTS: places a game piece at position, flips other game pieces as needed and advances the game to the
     //          next turn. Returns true if successful, false otherwise.
-    public boolean placePiece() {
+    public boolean placePiece(int position) {
         return false;
     }
 
