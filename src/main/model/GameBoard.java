@@ -272,7 +272,7 @@ public class GameBoard {
 
     // MODIFIES: this
     // EFFECTS: Calls the appropriate cursor movement method based on dir (only called on diagonal
-    //          directions).
+    //          directions) - will only be called for dir = 5 to dir = 8.
     private void moveCursorDirectionDiagonal(int dir) throws IllegalCursorException {
         switch (dir) {
             case 5:
@@ -284,7 +284,7 @@ public class GameBoard {
             case 7:
                 cursor.moveCursorUpperRight();
                 break;
-            case 8:
+            default:
                 cursor.moveCursorUpperLeft();
         }
     }
