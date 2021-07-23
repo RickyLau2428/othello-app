@@ -42,13 +42,14 @@ public class OthelloGame {
             rawInput = sc.nextLine();
 
             while (!(game.placePiece(game.translateInput(rawInput)))) {
-                System.out.println("Please enter a valid command: ");
-                System.out.println("Command: ");
+                System.out.print("Please enter a valid command: ");
                 rawInput = sc.nextLine();
             }
             System.out.println("Valid move processed. Next turn: ");
         }
         System.out.println("The game is now over. Calculating score...");
+        System.out.println("The final board state was: ");
+        drawBoard.printBoard();
         State victor = game.endGame();
         printEndMessage(victor);
     }
@@ -70,7 +71,7 @@ public class OthelloGame {
     // EFFECTS: Prints the starting message to console
     private void printWelcomeMessage() {
         System.out.println("Welcome to IoMoth's Othello implementation! Black game pieces are represented by "
-                + BLACK_CIRCLE + " and " + WHITE_CIRCLE + " for White game pieces.");
+                + BLACK_CIRCLE + " and white pieces are represented by " + WHITE_CIRCLE + ".");
         System.out.println("Have fun!");
     }
 
