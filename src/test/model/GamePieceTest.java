@@ -2,6 +2,6 @@ package model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MyModelTest {
+class GamePieceTest {
     // delete or rename this class!
 }

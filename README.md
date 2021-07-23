@@ -7,21 +7,22 @@ played on a computer, faithful to the original rules as provided by the World Ot
 (rules found here https://www.worldothello.org/about/about-othello/othello-rules/official-rules/english).
 
 As a quick summary, my application will be able to: 
-* Do whatever an Othello board can do and **more**<sup>1</sup>.
+* Do whatever an Othello board can do and **more**.
 * Store a current game to be finished at another time.
 * (Pending - more things to be added as I think of them)
 
 ## Who is this for?
 My application can be used by absolutely anybody who has an interest in playing Othello, from those who have never 
-heard of it<sup>2</sup> to veteran players. As long as you have two players (or maybe just one if you enjoy playing
+heard of it to veteran players. As long as you have two players (or maybe just one if you enjoy playing
 against yourself), this application will satisfy *most* of your Othello needs.
 
 ## Why Othello?
-I've never actually played Othello before, so I consider this as a chance to learn more about the game in-depth from
-an implementation perspective.
+I was inspired to design my project around Othello by watching gameplay on YouTube. To be completely frank, I have 
+never played the game before, but I felt that it translated into a program fairly well and would be fun to implement.
 
----
-<sup>1</sup> Prevention of any foul play or scheming that may go undetected in 
-a physical Othello match.
 
-<sup>2</sup> Please consult the rules online beforehand (rules not included in application).
+## User Stories
+* As a user, I want to be able to place a piece on the board
+* As a user, I want to be able to capture opponent pieces
+* As a user, I want to be able to start an Othello game with the correct starting configuration
+* As a user, I want to be able to end a game of Othello and determine who the superior Othello player is.
