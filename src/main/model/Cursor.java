@@ -5,7 +5,7 @@ import exceptions.IllegalCursorException;
 import static model.GameBoard.BOARD_SIZE;
 import static model.GameBoard.SIDE_LENGTH;
 
-// Handles movement through the board
+// Represents a cursor on the board - retains its original position, but can also check surrounding squares.
 public class Cursor {
     private int original;
     private int current;

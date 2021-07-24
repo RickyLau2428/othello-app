@@ -7,7 +7,8 @@ import java.util.*;
 
 import static model.State.*;
 
-// Translates player input and processes game rules
+// Represents a game of Othello played on a square board with side length SIDE_LENGTH. Each square on the board is
+// represented by a number ranging from 0 to 63, increasing from left to right and from top to bottom.
 public class GameBoard {
     // INVARIANT: SIDE_LENGTH must be 8
     public static final int SIDE_LENGTH = 8;
@@ -123,9 +124,8 @@ public class GameBoard {
         }
     }
 
-    // MODIFIES: this
     // EFFECTS: Translates a player input command to the appropriate position
-    //          on the board. Returns -1 if the input is invalid.
+    //          on the board and returns the result. Returns -1 if the input is invalid.
     public int translateInput(String input) {
         try {
             String toTranslate = sanitizeInput(input);

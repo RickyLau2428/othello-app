@@ -7,7 +7,7 @@ import java.util.List;
 
 import static model.GameBoard.SIDE_LENGTH;
 
-// Prints the current board to console
+// Prints a board state to console
 public class DrawBoard {
     public static final String WHITE_CIRCLE = "⭘";
     public static final String BLACK_CIRCLE = "●";
