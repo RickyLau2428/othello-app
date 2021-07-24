@@ -30,7 +30,7 @@ public class Cursor {
     }
 
     // MODIFIES: this
-    // EFFECTS: Sets both this.original and this.current to position
+    // EFFECTS: Sets the entirety of the cursor to position
     public void setPosition(int position) throws IllegalCursorException {
         if (!(0 <= position && position < BOARD_SIZE)) {
             throw new IllegalCursorException();

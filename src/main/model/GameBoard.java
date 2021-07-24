@@ -87,7 +87,7 @@ public class GameBoard {
     }
 
     // MODIFIES: this
-    // EFFECTS: Sets up the board in the starting configuration
+    // EFFECTS: Sets up the board in the starting configuration.
     public void setUpGame() {
         board.get(Q1).setState(BLACK);
         board.get(Q2).setState(WHITE);
@@ -96,7 +96,7 @@ public class GameBoard {
     }
 
     // MODIFIES: this
-    // EFFECTS: Counts the total number of black and white pieces on the board and updates fields.
+    // EFFECTS: Counts the total number of black and white pieces on the board and updates corresponding fields.
     //          Returns the winner of the match, or EMPTY if it is a tie.
     public State endGame() {
         for (GamePiece piece : board) {
@@ -116,7 +116,7 @@ public class GameBoard {
     }
 
     // MODIFIES: this
-    // EFFECTS: Ends the game if gameOverCounter == 2
+    // EFFECTS: Ends the game if two consecutive turns have no valid moves.
     public void checkGameOver() {
         if (gameOverCounter == 2) {
             isGameOver = true;
@@ -125,7 +125,7 @@ public class GameBoard {
 
     // MODIFIES: this
     // EFFECTS: Translates a player input command to the appropriate position
-    //          on the board. Returns -1 if the input is invalid
+    //          on the board. Returns -1 if the input is invalid.
     public int translateInput(String input) {
         try {
             String toTranslate = sanitizeInput(input);
@@ -133,7 +133,6 @@ public class GameBoard {
             int num = 8 * (toTranslate.charAt(1) - '1');
             return letter + num;
         } catch (IllegalPlayerInputException e) {
-            System.out.println("Player input did not match requirements. Please try again.");
             return -1;
         }
     }
@@ -151,8 +150,8 @@ public class GameBoard {
     }
 
     // MODIFIES: this
-    // EFFECTS: If no valid moves can be made, increments gameOverCounter by 1 and advances the game to the next turn.
-    //          Returns true if there are valid moves, and false otherwise.
+    // EFFECTS: If no valid moves can be made, increments gameOverCounter by 1, advances the game to the next turn
+    //          and returns false. Does nothing and returns true if there are any valid moves.
     public boolean checkAnyValidMoves() {
         if (validMoves.isEmpty()) {
             gameOverCounter++;
@@ -163,7 +162,7 @@ public class GameBoard {
     }
 
     // MODIFIES: this
-    // EFFECTS: Progresses the game to the next player's turn
+    // EFFECTS: Progresses the game to the next player's turn and stores any valid moves.
     public void nextTurn() {
         if (turn.equals(BLACK)) {
             turn = WHITE;
@@ -173,7 +172,6 @@ public class GameBoard {
         setValidMoves();
     }
 
-    // REQUIRES: 0 <= position < BOARD_SIZE
     // MODIFIES: this
     // EFFECTS: places a game piece at position, flips other game pieces as needed and advances the game to the
     //          next turn. Returns true if successful, false otherwise.
@@ -190,9 +188,7 @@ public class GameBoard {
     }
 
     // MODIFIES: this
-    // EFFECTS: Modifies validMoves such that the key represents a position on the board and the corresponding
-    //          value is a set of GamePieces that are flipped on a potential play. Sets validMoves to be empty
-    //          if there are no valid moves.
+    // EFFECTS: Scans the entire board and adds any valid moves to validMoves
     public void setValidMoves() {
         // Clears validMoves for every new board state
         validMoves = new HashMap<>();
@@ -206,7 +202,7 @@ public class GameBoard {
     }
 
     // MODIFIES: this
-    // EFFECTS: Checks in all directions and modifies validMoves as needed
+    // EFFECTS: Checks for valid moves in all directions, using the current player's pieces as anchor points.
     private void checkAllDirections(State turn) {
         for (int i = 1; i <= 8; i++) {
             checkDirection(turn, i);
@@ -215,7 +211,7 @@ public class GameBoard {
 
     // MODIFIES: this
     // EFFECTS: Checks all pieces leading from cursor and adds any valid moves to validMoves. Resets the cursor
-    //          if it attempts to move illegally
+    //          if it attempts to move illegally.
     public void checkDirection(State turn, int direction) {
         try {
             List<GamePiece> potentialFlips = new ArrayList<>();
@@ -249,7 +245,7 @@ public class GameBoard {
 
     // MODIFIES: this
     // EFFECTS: Calls the appropriate cursor movement method based on dir (1 calls moveCursorRight, moving
-    //          clockwise, such that 8 will call moveCursorUpperRight)
+    //          clockwise, such that 8 will call moveCursorUpperRight).
     private void moveCursorDirection(int dir) throws IllegalCursorException {
         switch (dir) {
             case 1:
