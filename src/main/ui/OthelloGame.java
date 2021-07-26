@@ -38,12 +38,14 @@ public class OthelloGame {
             game.setGameOverCounter(0);
             printTurnInfo();
             receiveUserInput();
-
         }
-
         printEndMessage();
     }
 
+    // MODIFIES: this
+    // EFFECTS : Asks for user input and stores it in this. If the user input did not result in a valid move or
+    //           did not follow style requirements, prompts the user to enter a different command.
+    //           Reports to the user if their move was valid.
     private void receiveUserInput() {
         System.out.print("Command: ");
         rawInput = sc.nextLine();
