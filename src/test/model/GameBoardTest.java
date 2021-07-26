@@ -62,12 +62,23 @@ public class GameBoardTest {
 
     @Test
     public void testTranslateInputNoExceptions() {
-        assertEquals(52, testBoard.translateInput("E7"));
+        try {
+            assertEquals(52, testBoard.translateInput("E7"));
+        } catch (IllegalPlayerInputException e) {
+            fail("Exception not expected.");
+        }
+
     }
 
     @Test
     public void testTranslateInputExceptionThrown() {
-        assertEquals(-1, testBoard.translateInput("AJ"));
+        try {
+            assertEquals(-1, testBoard.translateInput("AJ"));
+            fail("Exception not thrown.");
+        } catch (IllegalPlayerInputException e) {
+
+        }
+
     }
 
     @Test

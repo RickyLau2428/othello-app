@@ -124,16 +124,13 @@ public class GameBoard {
     }
 
     // EFFECTS: Translates a player input command to the appropriate position
-    //          on the board and returns the result. Returns -1 if the input is invalid.
-    public int translateInput(String input) {
-        try {
-            String toTranslate = sanitizeInput(input);
-            int letter = toTranslate.charAt(0) - 'A';
-            int num = 8 * (toTranslate.charAt(1) - '1');
-            return letter + num;
-        } catch (IllegalPlayerInputException e) {
-            return -1;
-        }
+    //          on the board and returns the result. Throws IllegalPlayerInputException if
+    //          the input is invalid.
+    public int translateInput(String input) throws IllegalPlayerInputException {
+        String toTranslate = sanitizeInput(input);
+        int letter = toTranslate.charAt(0) - 'A';
+        int num = 8 * (toTranslate.charAt(1) - '1');
+        return letter + num;
     }
 
     // EFFECTS: Checks strings for appropriate conditions and processes it for later translation.

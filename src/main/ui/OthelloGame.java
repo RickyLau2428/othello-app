@@ -1,5 +1,6 @@
 package ui;
 
+import exceptions.IllegalPlayerInputException;
 import model.GameBoard;
 import model.State;
 
@@ -10,7 +11,7 @@ import static model.State.CLEAR;
 import static ui.DrawBoard.FILLED_CIRCLE;
 import static ui.DrawBoard.CLEAR_CIRCLE;
 
-// Runs game and calls print methods
+// Represents a running match of Othello that interacts directly with the user(s)
 public class OthelloGame {
     private GameBoard game;
     private Scanner sc;
@@ -35,27 +36,50 @@ public class OthelloGame {
                 continue;
             }
             game.setGameOverCounter(0);
+            printTurnInfo();
+            receiveUserInput();
 
-            drawBoard.printBoard();
-            printTurnInstructions();
-            System.out.print("Command: ");
-            rawInput = sc.nextLine();
-
-            while (!(game.placePiece(game.translateInput(rawInput)))) {
-                System.out.print("Please enter a valid command: ");
-                rawInput = sc.nextLine();
-            }
-            System.out.println("Valid move processed. Next turn: ");
         }
+
+        printEndMessage();
+    }
+
+    private void receiveUserInput() {
+        System.out.print("Command: ");
+        rawInput = sc.nextLine();
+        boolean isPiecePlaced = false;
+
+        do {
+            try {
+                isPiecePlaced = game.placePiece(game.translateInput(rawInput));
+                if (!isPiecePlaced) {
+                    System.out.println("Input was not a valid move. Please try again.");
+                    printRetryMessage();
+                }
+            } catch (IllegalPlayerInputException e) {
+                System.out.println("Player input did not match requirements. Please try again.");
+                printRetryMessage();
+            }
+        } while (!isPiecePlaced);
+
+        System.out.println("Valid move processed. Next turn: ");
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Prompts the user to re-enter a valid command and stores it in this
+    private void printRetryMessage() {
+        System.out.print("Please enter a valid command: ");
+        rawInput = sc.nextLine();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Ends the game and prints the final board state, the victor and the final score to console
+    private void printEndMessage() {
         System.out.println("The game is now over. Calculating score...");
         System.out.println("The final board state was: ");
         drawBoard.printBoard();
         State victor = game.endGame();
-        printEndMessage(victor);
-    }
 
-    // EFFECTS: Prints the victor of the match and the final score to console
-    private void printEndMessage(State victor) {
         System.out.println("The superior Othello player is...");
         if (victor.equals(CLEAR)) {
             System.out.println("Clear! Congratulations!");
@@ -76,8 +100,9 @@ public class OthelloGame {
         System.out.println("Have fun!");
     }
 
-    // EFFECTS: Prints instructions for the current turn
-    private void printTurnInstructions() {
+    // EFFECTS: Prints board state and instructions for the current turn to console
+    private void printTurnInfo() {
+        drawBoard.printBoard();
         System.out.println("Input a placement command in the format <letter><number> e.g. \"A5\"");
         if (game.getTurn().equals(FILL)) {
             System.out.println("It is currently fill's turn.");
@@ -87,7 +112,7 @@ public class OthelloGame {
     }
 
     public static void main(String[] args) {
-        OthelloGame game = new OthelloGame();
-        game.playGame();
+        OthelloGame match = new OthelloGame();
+        match.playGame();
     }
 }
