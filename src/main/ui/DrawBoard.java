@@ -7,7 +7,7 @@ import java.util.List;
 
 import static model.GameBoard.SIDE_LENGTH;
 
-// Prints a board state to console
+// Represents a rendering of a current board state on a console
 public class DrawBoard {
     public static final String CLEAR_CIRCLE = "⭘";
     public static final String FILLED_CIRCLE = "●";
@@ -36,7 +36,7 @@ public class DrawBoard {
     }
 
     // EFFECTS: Returns the appropriate character to console based on contents of board at
-    //          positions: " " for EMPTY, WHITE_CIRCLE for WHITE, BLACK_CIRCLE for BLACK
+    //          positions: " " for EMPTY, FILL_CIRCLE for FILL, CLEAR_CIRCLE for CLEAR
     private String retrievePiece(int position) {
         switch (board.get(position).getState()) {
             case CLEAR:
