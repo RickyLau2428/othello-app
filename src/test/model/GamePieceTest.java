@@ -11,34 +11,34 @@ class GamePieceTest {
 
     @BeforeEach
     public void setup() {
-        testPiece = new GamePiece(0, BLACK);
+        testPiece = new GamePiece(0, FILL);
     }
 
     @Test
     public void testConstructor() {
         assertEquals(0, testPiece.getPosition());
-        assertEquals(BLACK, testPiece.getState());
+        assertEquals(FILL, testPiece.getState());
     }
 
     @Test
     public void testSetState() {
-        testPiece.setState(WHITE);
-        assertEquals(WHITE, testPiece.getState());
+        testPiece.setState(CLEAR);
+        assertEquals(CLEAR, testPiece.getState());
 
         testPiece.setState(EMPTY);
         assertEquals(EMPTY, testPiece.getState());
     }
 
     @Test
-    public void testFlipBlack() {
+    public void testFlipFill() {
         testPiece.flip();
-        assertEquals(WHITE, testPiece.getState());
+        assertEquals(CLEAR, testPiece.getState());
     }
 
     @Test
-    public void testFlipWhite() {
-        testPiece.setState(WHITE);
+    public void testFlipClear() {
+        testPiece.setState(CLEAR);
         testPiece.flip();
-        assertEquals(BLACK, testPiece.getState());
+        assertEquals(FILL, testPiece.getState());
     }
 }

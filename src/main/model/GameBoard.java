@@ -22,28 +22,27 @@ public class GameBoard {
     public static final int Q4 = (SIDE_LENGTH * (MARGIN + 1)) + (MARGIN + 1);
 
     private List<GamePiece> board;
-    // INVARIANT: turn is either BLACK or WHITE
     private State turn;
     private HashMap<Integer, List<GamePiece>> validMoves;
     private Cursor cursor;
     private boolean isGameOver;
-    private int whitePieceCount;
-    private int blackPieceCount;
+    private int clearPieceCount;
+    private int fillPieceCount;
     private int gameOverCounter;
 
-    // EFFECTS: Constructs a new game board in the starting configuration (black goes first)
+    // EFFECTS: Constructs a new game board in the starting configuration (fill goes first)
     public GameBoard() {
         board = new LinkedList<>();
         for (int i = 0; i < BOARD_SIZE; i++) {
             board.add(new GamePiece(i, EMPTY));
         }
         setUpGame();
-        turn = BLACK;
+        turn = FILL;
         validMoves = new HashMap<>();
         cursor = new Cursor(0);
         isGameOver = false;
-        whitePieceCount = 0;
-        blackPieceCount = 0;
+        clearPieceCount = 0;
+        fillPieceCount = 0;
         gameOverCounter = 0;
         setValidMoves();
     }
@@ -61,12 +60,12 @@ public class GameBoard {
         return this.turn;
     }
 
-    public int getWhitePieceCount() {
-        return whitePieceCount;
+    public int getClearPieceCount() {
+        return clearPieceCount;
     }
 
-    public int getBlackPieceCount() {
-        return blackPieceCount;
+    public int getFillPieceCount() {
+        return fillPieceCount;
     }
 
     public boolean isGameOver() {
@@ -90,27 +89,27 @@ public class GameBoard {
     // MODIFIES: this
     // EFFECTS: Sets up the board in the starting configuration.
     public void setUpGame() {
-        board.get(Q1).setState(BLACK);
-        board.get(Q2).setState(WHITE);
-        board.get(Q3).setState(BLACK);
-        board.get(Q4).setState(WHITE);
+        board.get(Q1).setState(FILL);
+        board.get(Q2).setState(CLEAR);
+        board.get(Q3).setState(FILL);
+        board.get(Q4).setState(CLEAR);
     }
 
     // MODIFIES: this
-    // EFFECTS: Counts the total number of black and white pieces on the board and updates corresponding fields.
+    // EFFECTS: Counts the total number of fill and clear pieces on the board and updates corresponding fields.
     //          Returns the winner of the match, or EMPTY if it is a tie.
     public State endGame() {
         for (GamePiece piece : board) {
-            if (piece.getState().equals(WHITE)) {
-                whitePieceCount++;
-            } else if (piece.getState().equals(BLACK)) {
-                blackPieceCount++;
+            if (piece.getState().equals(CLEAR)) {
+                clearPieceCount++;
+            } else if (piece.getState().equals(FILL)) {
+                fillPieceCount++;
             }
         }
-        if (whitePieceCount > blackPieceCount) {
-            return WHITE;
-        } else if (blackPieceCount > whitePieceCount) {
-            return BLACK;
+        if (clearPieceCount > fillPieceCount) {
+            return CLEAR;
+        } else if (fillPieceCount > clearPieceCount) {
+            return FILL;
         } else {
             return EMPTY;
         }
@@ -164,10 +163,10 @@ public class GameBoard {
     // MODIFIES: this
     // EFFECTS: Progresses the game to the next player's turn and stores any valid moves.
     public void nextTurn() {
-        if (turn.equals(BLACK)) {
-            turn = WHITE;
+        if (turn.equals(FILL)) {
+            turn = CLEAR;
         } else {
-            turn = BLACK;
+            turn = FILL;
         }
         setValidMoves();
     }

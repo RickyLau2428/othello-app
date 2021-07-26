@@ -9,8 +9,8 @@ import static model.GameBoard.SIDE_LENGTH;
 
 // Prints a board state to console
 public class DrawBoard {
-    public static final String WHITE_CIRCLE = "⭘";
-    public static final String BLACK_CIRCLE = "●";
+    public static final String CLEAR_CIRCLE = "⭘";
+    public static final String FILLED_CIRCLE = "●";
     public static final String LINE = "+---";
     public static final String SIDE_LINE = "|";
 
@@ -39,10 +39,10 @@ public class DrawBoard {
     //          positions: " " for EMPTY, WHITE_CIRCLE for WHITE, BLACK_CIRCLE for BLACK
     private String retrievePiece(int position) {
         switch (board.get(position).getState()) {
-            case WHITE:
-                return WHITE_CIRCLE;
-            case BLACK:
-                return BLACK_CIRCLE;
+            case CLEAR:
+                return CLEAR_CIRCLE;
+            case FILL:
+                return FILLED_CIRCLE;
             default:
                 return " ";
         }

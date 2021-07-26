@@ -5,10 +5,10 @@ import model.State;
 
 import java.util.Scanner;
 
-import static model.State.BLACK;
-import static model.State.WHITE;
-import static ui.DrawBoard.BLACK_CIRCLE;
-import static ui.DrawBoard.WHITE_CIRCLE;
+import static model.State.FILL;
+import static model.State.CLEAR;
+import static ui.DrawBoard.FILLED_CIRCLE;
+import static ui.DrawBoard.CLEAR_CIRCLE;
 
 // Runs game and calls print methods
 public class OthelloGame {
@@ -57,31 +57,32 @@ public class OthelloGame {
     // EFFECTS: Prints the victor of the match and the final score to console
     private void printEndMessage(State victor) {
         System.out.println("The superior Othello player is...");
-        if (victor.equals(WHITE)) {
-            System.out.println("White! Congratulations!");
-        } else if (victor.equals(BLACK)) {
-            System.out.println("Black! Congratulations!");
+        if (victor.equals(CLEAR)) {
+            System.out.println("Clear! Congratulations!");
+        } else if (victor.equals(FILL)) {
+            System.out.println("Fill! Congratulations!");
         } else {
             System.out.println("Neither of you! It's a tie - congrats to both players!");
         }
-        System.out.println("The final score was " + game.getWhitePieceCount() + " for white, and "
-                + game.getBlackPieceCount() + " for black.");
+        System.out.println("The final score was " + game.getClearPieceCount() + " for clear, and "
+                + game.getFillPieceCount() + " for fill.");
     }
 
     // EFFECTS: Prints the starting message to console
     private void printWelcomeMessage() {
-        System.out.println("Welcome to IoMoth's Othello implementation! Black game pieces are represented by "
-                + BLACK_CIRCLE + " and white pieces are represented by " + WHITE_CIRCLE + ".");
+        System.out.println("Welcome to IoMoth's Othello implementation! To reduce ambiguity, black and "
+                + "white pieces are labeled as fill and clear respectively. Fill game pieces are represented by "
+                + FILLED_CIRCLE + " and clear pieces are represented by " + CLEAR_CIRCLE + ".");
         System.out.println("Have fun!");
     }
 
     // EFFECTS: Prints instructions for the current turn
     private void printTurnInstructions() {
         System.out.println("Input a placement command in the format <letter><number> e.g. \"A5\"");
-        if (game.getTurn().equals(BLACK)) {
-            System.out.println("It is currently Black's turn.");
-        } else if (game.getTurn().equals(WHITE)) {
-            System.out.println("It is currently White's turn.");
+        if (game.getTurn().equals(FILL)) {
+            System.out.println("It is currently fill's turn.");
+        } else if (game.getTurn().equals(CLEAR)) {
+            System.out.println("It is currently clear's turn.");
         }
     }
 

@@ -28,13 +28,13 @@ public class GamePiece {
     }
 
     // MODIFIES: this
-    // EFFECTS: Changes this.state from BLACK to WHITE or vice versa. Does nothing
+    // EFFECTS: Changes this.state from FILL to CLEAR or vice versa. Does nothing
     //          if state is EMPTY.
     public void flip() {
-        if (state.equals(BLACK)) {
-            state = WHITE;
+        if (state.equals(FILL)) {
+            state = CLEAR;
         } else {
-            state = BLACK;
+            state = FILL;
         }
     }
 }

@@ -24,12 +24,12 @@ public class GameBoardTest {
         // Normally called in constructor - called here to populate board with
         // starting configuration after clearing the board in setup()
         testBoard.setUpGame();
-        assertEquals(BLACK, testBoard.getTurn());
+        assertEquals(FILL, testBoard.getTurn());
 
-        assertEquals(BLACK, getPieceState(Q1));
-        assertEquals(WHITE, getPieceState(Q2));
-        assertEquals(BLACK, getPieceState(Q3));
-        assertEquals(WHITE, getPieceState(Q4));
+        assertEquals(FILL, getPieceState(Q1));
+        assertEquals(CLEAR, getPieceState(Q2));
+        assertEquals(FILL, getPieceState(Q3));
+        assertEquals(CLEAR, getPieceState(Q4));
     }
 
     @Test
@@ -111,21 +111,21 @@ public class GameBoardTest {
     }
 
     @Test
-    public void testNextTurnBlack() {
+    public void testNextTurnFill() {
         testBoard.nextTurn();
-        assertEquals(WHITE, testBoard.getTurn());
+        assertEquals(CLEAR, testBoard.getTurn());
     }
 
     @Test
-    public void testNextTurnWhite() {
-        testBoard.setTurn(WHITE);
+    public void testNextTurnClear() {
+        testBoard.setTurn(CLEAR);
         testBoard.nextTurn();
-        assertEquals(BLACK, testBoard.getTurn());
+        assertEquals(FILL, testBoard.getTurn());
     }
 
     @Test
     public void testPlacePieceEmptyBoardFailure() {
-        testBoard.setTurn(BLACK);
+        testBoard.setTurn(FILL);
         assertFalse(testBoard.placePiece(7));
         assertEquals(0, getActivePiecesNum());
     }
@@ -133,9 +133,9 @@ public class GameBoardTest {
     @Test
     public void testPlacePieceFullBoardFailure() {
         for (int i = 0; i < BOARD_SIZE; i++) {
-            setPiece(i, BLACK);
+            setPiece(i, FILL);
         }
-        testBoard.setTurn(BLACK);
+        testBoard.setTurn(FILL);
 
         assertFalse(testBoard.placePiece(8));
         assertEquals(64, getActivePiecesNum());
@@ -143,9 +143,9 @@ public class GameBoardTest {
 
     @Test
     public void testPlacePieceFailure() {
-        setPiece(3, WHITE);
-        setPiece(4, BLACK);
-        testBoard.setTurn(BLACK);
+        setPiece(3, CLEAR);
+        setPiece(4, FILL);
+        testBoard.setTurn(FILL);
 
         assertFalse(testBoard.placePiece(50));
         assertEquals(2, getActivePiecesNum());
@@ -154,65 +154,65 @@ public class GameBoardTest {
     @Test
     public void testPlacePieceMultipleSuccess() {
         for (int i = 18; i <= 21; i++) {
-            setPiece(i, WHITE);
+            setPiece(i, CLEAR);
         }
-        setPiece(22, BLACK);
-        setPiece(23, WHITE);
+        setPiece(22, FILL);
+        setPiece(23, CLEAR);
 
-        testBoard.setTurn(BLACK);
+        testBoard.setTurn(FILL);
         assertTrue(testBoard.placePiece(17));
         for (int i = 17; i <= 22; i++) {
-            assertEquals(BLACK, getPieceState(i));
+            assertEquals(FILL, getPieceState(i));
         }
-        assertEquals(WHITE, getPieceState(23));
+        assertEquals(CLEAR, getPieceState(23));
         assertEquals(7, getActivePiecesNum());
 
-        // WHITE'S turn
+        // CLEAR'S turn
         assertTrue(testBoard.placePiece(16));
         for (int i = 16; i <= 23; i++) {
-            assertEquals(WHITE, getPieceState(i));
+            assertEquals(CLEAR, getPieceState(i));
         }
         assertEquals(8, getActivePiecesNum());
     }
 
     @Test
     public void testLeftCaptureSingle() {
-        setPiece(27, BLACK);
-        setPiece(28, WHITE);
-        testBoard.setTurn(WHITE);
+        setPiece(27, FILL);
+        setPiece(28, CLEAR);
+        testBoard.setTurn(CLEAR);
         assertTrue(testBoard.placePiece(26));
 
-        assertEquals(WHITE, getPieceState(26));
-        assertEquals(WHITE, getPieceState(27));
-        assertEquals(WHITE, getPieceState(28));
+        assertEquals(CLEAR, getPieceState(26));
+        assertEquals(CLEAR, getPieceState(27));
+        assertEquals(CLEAR, getPieceState(28));
         assertEquals(3, getActivePiecesNum());
     }
 
     @Test
     public void testLeftCaptureMultiple() {
         for (int i = 1; i <= 6; i++) {
-            setPiece(i, WHITE);
+            setPiece(i, CLEAR);
         }
-        setPiece(7, BLACK);
-        testBoard.setTurn(BLACK);
+        setPiece(7, FILL);
+        testBoard.setTurn(FILL);
 
         assertTrue(testBoard.placePiece(0));
 
         for (int i = 0; i <= 7; i++) {
-            assertEquals(BLACK, getPieceState(i));
+            assertEquals(FILL, getPieceState(i));
         }
         assertEquals(8, getActivePiecesNum());
     }
 
     @Test
     public void testRightCaptureSingle() {
-        setPiece(20, BLACK);
-        setPiece(21, WHITE);
-        testBoard.setTurn(BLACK);
+        setPiece(20, FILL);
+        setPiece(21, CLEAR);
+        testBoard.setTurn(FILL);
         assertTrue(testBoard.placePiece(22));
 
         for (int i = 20; i <= 22; i++) {
-            assertEquals(BLACK, getPieceState(i));
+            assertEquals(FILL, getPieceState(i));
         }
         assertEquals(3, getActivePiecesNum());
     }
@@ -220,28 +220,28 @@ public class GameBoardTest {
     @Test
     public void testRightCaptureMultiple() {
         for (int i = 57; i <= 62; i++) {
-            setPiece(i, BLACK);
+            setPiece(i, FILL);
         }
-        setPiece(56, WHITE);
-        testBoard.setTurn(WHITE);
+        setPiece(56, CLEAR);
+        testBoard.setTurn(CLEAR);
         assertTrue(testBoard.placePiece(63));
 
         for (int i = 56; i <= 63; i++) {
-            assertEquals(WHITE, getPieceState(i));
+            assertEquals(CLEAR, getPieceState(i));
         }
         assertEquals(8, getActivePiecesNum());
     }
 
     @Test
     public void testUpCaptureSingle() {
-        setPiece(27, BLACK);
-        setPiece(35, WHITE);
+        setPiece(27, FILL);
+        setPiece(35, CLEAR);
 
-        testBoard.setTurn(WHITE);
+        testBoard.setTurn(CLEAR);
         assertTrue(testBoard.placePiece(19));
 
         for (int i = 19; i <= 35; i += 8) {
-            assertEquals(WHITE, getPieceState(i));
+            assertEquals(CLEAR, getPieceState(i));
         }
         assertEquals(3, getActivePiecesNum());
     }
@@ -249,29 +249,29 @@ public class GameBoardTest {
     @Test
     public void testUpCaptureMultiple() {
         for (int i = 8; i <= 48; i += 8) {
-            setPiece(i, WHITE);
+            setPiece(i, CLEAR);
         }
-        setPiece(56, BLACK);
+        setPiece(56, FILL);
 
-        testBoard.setTurn(BLACK);
+        testBoard.setTurn(FILL);
         assertTrue(testBoard.placePiece(0));
 
         for (int i = 0; i <= 56; i += 8) {
-            assertEquals(BLACK, getPieceState(i));
+            assertEquals(FILL, getPieceState(i));
         }
         assertEquals(8, getActivePiecesNum());
     }
 
     @Test
     public void testDownCaptureSingle() {
-        setPiece(30, WHITE);
-        setPiece(22, BLACK);
+        setPiece(30, CLEAR);
+        setPiece(22, FILL);
 
-        testBoard.setTurn(BLACK);
+        testBoard.setTurn(FILL);
         assertTrue(testBoard.placePiece(38));
 
         for (int i = 22; i <= 38; i += 8) {
-            assertEquals(BLACK, getPieceState(i));
+            assertEquals(FILL, getPieceState(i));
         }
         assertEquals(3, getActivePiecesNum());
     }
@@ -279,29 +279,29 @@ public class GameBoardTest {
     @Test
     public void testDownCaptureMultiple() {
         for (int i = 15; i <= 55; i += 8) {
-            setPiece(i, BLACK);
+            setPiece(i, FILL);
         }
-        setPiece(7, WHITE);
+        setPiece(7, CLEAR);
 
-        testBoard.setTurn(WHITE);
+        testBoard.setTurn(CLEAR);
         assertTrue(testBoard.placePiece(63));
 
         for (int i = 7; i <= 63; i += 8) {
-            assertEquals(WHITE, getPieceState(i));
+            assertEquals(CLEAR, getPieceState(i));
         }
         assertEquals(8, getActivePiecesNum());
     }
 
     @Test
     public void testUpperRightCaptureSingle() {
-        setPiece(26, WHITE);
-        setPiece(19, BLACK);
+        setPiece(26, CLEAR);
+        setPiece(19, FILL);
 
-        testBoard.setTurn(WHITE);
+        testBoard.setTurn(CLEAR);
         assertTrue(testBoard.placePiece(12));
 
         for (int i = 12; i <= 27; i += 7) {
-            assertEquals(WHITE, getPieceState(i));
+            assertEquals(CLEAR, getPieceState(i));
         }
         assertEquals(3, getActivePiecesNum());
     }
@@ -309,29 +309,29 @@ public class GameBoardTest {
     @Test
     public void testUpperRightCaptureMultiple() {
         for (int i = 14; i <= 49; i += 7) {
-            setPiece(i, WHITE);
+            setPiece(i, CLEAR);
         }
-        setPiece(56, BLACK);
-        testBoard.setTurn(BLACK);
+        setPiece(56, FILL);
+        testBoard.setTurn(FILL);
 
         assertTrue(testBoard.placePiece(7));
 
         for (int i = 7; i <= 56; i += 7) {
-            assertEquals(BLACK, getPieceState(i));
+            assertEquals(FILL, getPieceState(i));
         }
         assertEquals(8, getActivePiecesNum());
     }
 
     @Test
     public void testUpperLeftCaptureSingle() {
-        setPiece(35, WHITE);
-        setPiece(44, BLACK);
-        testBoard.setTurn(BLACK);
+        setPiece(35, CLEAR);
+        setPiece(44, FILL);
+        testBoard.setTurn(FILL);
 
         assertTrue(testBoard.placePiece(26));
 
         for (int i = 26; i <= 44; i += 9) {
-            assertEquals(BLACK, getPieceState(i));
+            assertEquals(FILL, getPieceState(i));
         }
         assertEquals(3, getActivePiecesNum());
     }
@@ -339,29 +339,29 @@ public class GameBoardTest {
     @Test
     public void testUpperLeftCaptureMultiple() {
         for (int i = 9; i <= 54; i += 9) {
-            setPiece(i, BLACK);
+            setPiece(i, FILL);
         }
-        setPiece(63, WHITE);
-        testBoard.setTurn(WHITE);
+        setPiece(63, CLEAR);
+        testBoard.setTurn(CLEAR);
 
         assertTrue(testBoard.placePiece(0));
 
         for (int i = 0; i <= 63; i += 9) {
-            assertEquals(WHITE, getPieceState(i));
+            assertEquals(CLEAR, getPieceState(i));
         }
         assertEquals(8, getActivePiecesNum());
     }
 
     @Test
     public void testLowerRightCaptureSingle() {
-        setPiece(42, WHITE);
-        setPiece(51, BLACK);
-        testBoard.setTurn(WHITE);
+        setPiece(42, CLEAR);
+        setPiece(51, FILL);
+        testBoard.setTurn(CLEAR);
 
         assertTrue(testBoard.placePiece(60));
 
         for (int i = 42; i <= 60; i += 9) {
-            assertEquals(WHITE, getPieceState(i));
+            assertEquals(CLEAR, getPieceState(i));
         }
         assertEquals(3, getActivePiecesNum());
     }
@@ -369,64 +369,64 @@ public class GameBoardTest {
     @Test
     public void testLowerRightCaptureMultiple() {
         for (int i = 9; i <= 54; i += 9) {
-            setPiece(i, WHITE);
+            setPiece(i, CLEAR);
         }
-        setPiece(0, BLACK);
-        testBoard.setTurn(BLACK);
+        setPiece(0, FILL);
+        testBoard.setTurn(FILL);
 
         assertTrue(testBoard.placePiece(63));
 
         for (int i = 0; i <= 63; i += 9) {
-            assertEquals(BLACK, getPieceState(i));
+            assertEquals(FILL, getPieceState(i));
         }
         assertEquals(8, getActivePiecesNum());
     }
 
     @Test
     public void testCaptureAllDirectionsMultiple() {
-        setPiece(0, BLACK);
-        setPiece(3, BLACK);
-        setPiece(6, BLACK);
-        setPiece(24, BLACK);
-        setPiece(31, BLACK);
-        setPiece(48, BLACK);
-        setPiece(59, BLACK);
-        setPiece(63, BLACK);
+        setPiece(0, FILL);
+        setPiece(3, FILL);
+        setPiece(6, FILL);
+        setPiece(24, FILL);
+        setPiece(31, FILL);
+        setPiece(48, FILL);
+        setPiece(59, FILL);
+        setPiece(63, FILL);
         for (int i = 9 ; i <= 54; i += 9) {
             if (i != 27) {
-                setPiece(i, WHITE);
+                setPiece(i, CLEAR);
             }
         }
         for (int i = 11; i <= 51; i += 8) {
             if (i != 27) {
-                setPiece(i, WHITE);
+                setPiece(i, CLEAR);
             }
         }
         for (int i = 13; i <= 41; i +=7) {
             if (i != 27) {
-                setPiece(i, WHITE);
+                setPiece(i, CLEAR);
             }
         }
         for (int i = 25; i <= 30; i++) {
             if (i != 27) {
-                setPiece(i, WHITE);
+                setPiece(i, CLEAR);
             }
         }
-        testBoard.setTurn(BLACK);
+        testBoard.setTurn(FILL);
 
         assertTrue(testBoard.placePiece(27));
 
         for (int i = 0; i <= 63; i += 9) {
-            assertEquals(BLACK, getPieceState(i));
+            assertEquals(FILL, getPieceState(i));
         }
         for (int i = 3; i <= 59; i += 8) {
-            assertEquals(BLACK, getPieceState(i));
+            assertEquals(FILL, getPieceState(i));
         }
         for (int i = 6; i <= 48; i += 7) {
-            assertEquals(BLACK, getPieceState(i));
+            assertEquals(FILL, getPieceState(i));
         }
         for (int i = 24; i <= 31; i++) {
-            assertEquals(BLACK, getPieceState(i));
+            assertEquals(FILL, getPieceState(i));
         }
         assertEquals(28, getActivePiecesNum());
     }
@@ -434,7 +434,7 @@ public class GameBoardTest {
     @Test
     public void testSetValidMovesFailure() {
         for (int i = 0; i <= 63; i++) {
-            setPiece(i, BLACK);
+            setPiece(i, FILL);
         }
         testBoard.setValidMoves();
         assertTrue(testBoard.getValidMoves().isEmpty());
@@ -442,17 +442,17 @@ public class GameBoardTest {
 
     @Test
     public void testPassTurn() {
-        // Sets up board - black has no valid moves
+        // Sets up board - fill has no valid moves
         for (int i = 0; i <= 23; i++) {
             if (i != 7) {
-                setPiece(i, BLACK);
+                setPiece(i, FILL);
             }
         }
         for (int i = 31; i <= 63; i += 8) {
-            setPiece(i, WHITE);
+            setPiece(i, CLEAR);
         }
         // Simulates turn passing
-        testBoard.setTurn(BLACK);
+        testBoard.setTurn(FILL);
         assertFalse(testBoard.checkAnyValidMoves());
         assertTrue(testBoard.checkAnyValidMoves());
         testBoard.setGameOverCounter(0);
@@ -464,61 +464,61 @@ public class GameBoardTest {
     @Test
     public void testEndGameTie() {
         for (int i = 0; i <= 31; i++) {
-            setPiece(i, BLACK);
+            setPiece(i, FILL);
         }
         for (int i = 32; i <= 63; i++) {
-            setPiece(i, WHITE);
+            setPiece(i, CLEAR);
         }
         // Simulates turn passing
-        testBoard.setTurn(BLACK);
+        testBoard.setTurn(FILL);
         assertFalse(testBoard.checkAnyValidMoves());
         assertFalse(testBoard.checkAnyValidMoves());
 
         testBoard.checkGameOver();
         assertTrue(testBoard.isGameOver());
         assertEquals(EMPTY, testBoard.endGame());
-        assertEquals(32, testBoard.getWhitePieceCount());
-        assertEquals(32, testBoard.getBlackPieceCount());
+        assertEquals(32, testBoard.getClearPieceCount());
+        assertEquals(32, testBoard.getFillPieceCount());
     }
 
     @Test
-    public void testEndGameWhiteVictory() {
+    public void testEndGameClearVictory() {
         for (int i = 0; i <= 23; i++) {
-            setPiece(i, WHITE);
+            setPiece(i, CLEAR);
         }
         for (int i = 24; i <= 56; i += 8) {
-            setPiece(i, BLACK);
+            setPiece(i, FILL);
         }
         // Simulates turn passing
-        testBoard.setTurn(BLACK);
+        testBoard.setTurn(FILL);
         assertFalse(testBoard.checkAnyValidMoves());
         assertFalse(testBoard.checkAnyValidMoves());
 
         testBoard.checkGameOver();
         assertTrue(testBoard.isGameOver());
-        assertEquals(WHITE, testBoard.endGame());
-        assertEquals(24, testBoard.getWhitePieceCount());
-        assertEquals(5, testBoard.getBlackPieceCount());
+        assertEquals(CLEAR, testBoard.endGame());
+        assertEquals(24, testBoard.getClearPieceCount());
+        assertEquals(5, testBoard.getFillPieceCount());
     }
 
     @Test
-    public void testEndGameBlackVictory() {
+    public void testEndGameFillVictory() {
         for (int i = 0; i <= 23; i++) {
-            setPiece(i, BLACK);
+            setPiece(i, FILL);
         }
         for (int i = 31; i <= 63; i += 8) {
-            setPiece(i, WHITE);
+            setPiece(i, CLEAR);
         }
         // Simulates turn passing
-        testBoard.setTurn(BLACK);
+        testBoard.setTurn(FILL);
         assertFalse(testBoard.checkAnyValidMoves());
         assertFalse(testBoard.checkAnyValidMoves());
 
         testBoard.checkGameOver();
         assertTrue(testBoard.isGameOver());
-        assertEquals(BLACK, testBoard.endGame());
-        assertEquals(24, testBoard.getBlackPieceCount());
-        assertEquals(5, testBoard.getWhitePieceCount());
+        assertEquals(FILL, testBoard.endGame());
+        assertEquals(24, testBoard.getFillPieceCount());
+        assertEquals(5, testBoard.getClearPieceCount());
     }
 
     // EFFECTS: Places pieces on the test board regardless of game rules
