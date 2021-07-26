@@ -55,11 +55,11 @@ public class OthelloGame {
             try {
                 isPiecePlaced = game.placePiece(game.translateInput(rawInput));
                 if (!isPiecePlaced) {
-                    System.out.println("Input was not a valid move. Please try again.");
+                    System.out.println("Player input was not a valid move. Please try again.");
                     printRetryMessage();
                 }
             } catch (IllegalPlayerInputException e) {
-                System.out.println("Player input did not match requirements. Please try again.");
+                System.out.println("Player input did not match style requirements. Please try again.");
                 printRetryMessage();
             }
         } while (!isPiecePlaced);
