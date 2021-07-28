@@ -29,6 +29,7 @@ public class OthelloGame {
     // EFFECTS: Starts the game and keeps it running until the game ends
     public void playGame() {
         printWelcomeMessage();
+        game.setValidMoves();
         while (!game.isGameOver()) {
             if (!game.checkAnyValidMoves()) {
                 game.nextTurn();
