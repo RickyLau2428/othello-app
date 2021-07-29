@@ -1,7 +1,6 @@
 package model;
 
-import org.json.JSONArray;
-import persistence.Writeable;
+import persistence.Writable;
 import exceptions.IllegalCursorException;
 import exceptions.IllegalPlayerInputException;
 import org.json.JSONObject;
@@ -12,7 +11,7 @@ import static model.State.*;
 
 // Represents a game of Othello played on a square board with side length SIDE_LENGTH. Each square on the board is
 // represented by a number ranging from 0 to 63, increasing from left to right and from top to bottom.
-public class GameBoard implements Writeable {
+public class GameBoard implements Writable {
     // INVARIANT: SIDE_LENGTH must be 8
     public static final int SIDE_LENGTH = 8;
     public static final int BOARD_SIZE = SIDE_LENGTH * SIDE_LENGTH;
@@ -51,6 +50,21 @@ public class GameBoard implements Writeable {
         setValidMoves();
     }
 
+    // EFFECTS: Initializes a board loaded from file
+    public GameBoard(State turn, int clearPieces, int fillPieces, int gameOverCount) {
+        this.turn = turn;
+        clearPieceCount = clearPieces;
+        fillPieceCount = fillPieces;
+        gameOverCounter = gameOverCount;
+
+        board = new LinkedList<>();
+        validMoves = new HashMap<>();
+        cursor = new Cursor(0);
+        isGameOver = false;
+
+        setValidMoves();
+    }
+
     // getters
     public List<GamePiece> getBoard() {
         return this.board;
@@ -84,6 +98,12 @@ public class GameBoard implements Writeable {
     public void setTurn(State state) {
         this.turn = state;
         setValidMoves();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Adds a game piece to the board (to preserve order, must only be used when loading from file).
+    public void addGamePiece(GamePiece gp) {
+        board.add(gp);
     }
 
     // MODIFIES: this

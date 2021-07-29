@@ -3,7 +3,9 @@ package ui;
 import exceptions.IllegalPlayerInputException;
 import model.GameBoard;
 import model.State;
+import persistence.JsonReader;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import static model.State.FILL;
@@ -13,11 +15,13 @@ import static ui.DrawBoard.CLEAR_CIRCLE;
 
 // Represents a running match of Othello that interacts directly with the user(s)
 public class OthelloGame {
+    private static final String JSON_STORE = "./data/testReaderEmptyBoard.json";
     private GameBoard game;
     private Scanner sc;
     private DrawBoard drawBoard;
     private String rawInput;
     private boolean isMenuOpen;
+    private JsonReader jsonReader;
 
     // EFFECTS: Creates a game board
     public OthelloGame() {
@@ -25,6 +29,7 @@ public class OthelloGame {
         sc = new Scanner(System.in);
         drawBoard = new DrawBoard(game.getBoard());
         isMenuOpen = false;
+        jsonReader = new JsonReader(JSON_STORE);
     }
 
     // MODIFIES: this
@@ -53,16 +58,16 @@ public class OthelloGame {
         System.out.print("Command: ");
         rawInput = sc.nextLine();
 
-        if (rawInput.equalsIgnoreCase("menu")) {
-            isMenuOpen = true;
-            while (isMenuOpen) {
-                displayMenu();
-                processMenuCommand();
-            }
-        }
-
         boolean isPiecePlaced = false;
         do {
+            if (rawInput.equalsIgnoreCase("menu")) {
+                isMenuOpen = true;
+                while (isMenuOpen) {
+                    displayMenu();
+                    processMenuCommand();
+                }
+            }
+
             try {
                 isPiecePlaced = game.placePiece(game.translateInput(rawInput));
                 if (!isPiecePlaced) {
@@ -100,6 +105,7 @@ public class OthelloGame {
             case "save":
                 break;
             case "load":
+                loadGame();
                 break;
             case "help":
                 displayValidMoves();
@@ -117,6 +123,20 @@ public class OthelloGame {
             case "quit":
                 System.exit(-1);
             default: printRetryMessage();
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Sets the current board state to one loaded from JSON_STORE
+    //          Code taken from JsonSerializationDemo at https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
+    private void loadGame() {
+        try {
+            game = jsonReader.read();
+            drawBoard = new DrawBoard(game.getBoard());
+            System.out.println("Loaded a saved board from " + JSON_STORE);
+            System.out.println(game.getClearPieceCount());
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
         }
     }
 

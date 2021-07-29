@@ -1,12 +1,12 @@
 package model;
 
 import org.json.JSONObject;
-import persistence.Writeable;
+import persistence.Writable;
 
 import static model.State.*;
 
 // Holds information for each game piece on the board (i.e. its position and current status)
-public class GamePiece implements Writeable {
+public class GamePiece implements Writable {
     private State state;
     private final int position;
 
