@@ -1,6 +1,8 @@
 package model;
 
 import exceptions.IllegalPlayerInputException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,6 +12,7 @@ import static model.State.EMPTY;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+// JUnit test class for GameBoard
 public class GameBoardTest extends BoardTest {
     GameBoard testBoard;
 
@@ -26,10 +29,25 @@ public class GameBoardTest extends BoardTest {
         testBoard.setUpGame();
         assertEquals(FILL, testBoard.getTurn());
 
+
         assertEquals(FILL, getPieceState(testBoard, Q1));
         assertEquals(CLEAR, getPieceState(testBoard, Q2));
         assertEquals(FILL, getPieceState(testBoard, Q3));
         assertEquals(CLEAR, getPieceState(testBoard, Q4));
+    }
+
+    @Test
+    public void testConstructorWithParameters() {
+        testBoard = new GameBoard(FILL, 0, 0, 0);
+
+        assertEquals(FILL, testBoard.getTurn());
+        assertEquals(0, testBoard.getClearPieceCount());
+        assertEquals(0, testBoard.getFillPieceCount());
+        assertEquals(0, testBoard.getGameOverCounter());
+
+        assertTrue(testBoard.getBoard().isEmpty());
+        assertTrue(testBoard.getValidMoves().isEmpty());
+        assertFalse(testBoard.isGameOver());
     }
 
     @Test
@@ -601,5 +619,50 @@ public class GameBoardTest extends BoardTest {
         assertEquals(FILL, testBoard.declareVictor());
         assertEquals(24, testBoard.getFillPieceCount());
         assertEquals(5, testBoard.getClearPieceCount());
+    }
+
+    @Test
+    public void testToJsonEmptyBoard() {
+        countPieces(testBoard);
+        JSONObject testJson = testBoard.toJson();
+        JSONArray testArray = testJson.getJSONArray("pieces");
+
+        assertEquals(FILL, testJson.get("turn"));
+        assertEquals(0, testJson.getInt("clearPieceCount"));
+        assertEquals(0, testJson.getInt("fillPieceCount"));
+        assertEquals(0, testJson.getInt("gameOverCount"));
+
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            JSONObject pieceToCheck = testArray.getJSONObject(i);
+            assertEquals(i, pieceToCheck.getInt("position"));
+            assertEquals(EMPTY, pieceToCheck.get("state"));
+        }
+    }
+
+    @Test
+    public void testToJsonGeneralBoard() {
+        testBoard.setUpGame();
+        testBoard.setTurn(CLEAR);
+        countPieces(testBoard);
+        JSONObject testJson = testBoard.toJson();
+        JSONArray testArray = testJson.getJSONArray("pieces");
+        JSONObject pieceToCheck;
+
+        assertEquals(CLEAR, testJson.get("turn"));
+        assertEquals(2, testJson.getInt("clearPieceCount"));
+        assertEquals(2, testJson.getInt("fillPieceCount"));
+        assertEquals(0, testJson.getInt("gameOverCount"));
+
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            pieceToCheck = testArray.getJSONObject(i);
+            assertEquals(i, pieceToCheck.getInt("position"));
+            if (i == 27 || i == 36) {
+                assertEquals(CLEAR, pieceToCheck.get("state"));
+            } else if (i == 28 || i == 35) {
+                assertEquals(FILL, pieceToCheck.get("state"));
+            } else {
+                assertEquals(EMPTY, pieceToCheck.get("state"));
+            }
+        }
     }
 }

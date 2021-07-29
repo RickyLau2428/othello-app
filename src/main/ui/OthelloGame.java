@@ -4,7 +4,9 @@ import exceptions.IllegalPlayerInputException;
 import model.GameBoard;
 import model.State;
 import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -15,13 +17,14 @@ import static ui.DrawBoard.CLEAR_CIRCLE;
 
 // Represents a running match of Othello that interacts directly with the user(s)
 public class OthelloGame {
-    private static final String JSON_STORE = "./data/testReaderEmptyBoard.json";
+    private static final String JSON_STORE = "./data/gameBoard.json";
     private GameBoard game;
     private Scanner sc;
     private DrawBoard drawBoard;
     private String rawInput;
     private boolean isMenuOpen;
     private JsonReader jsonReader;
+    private JsonWriter jsonWriter;
 
     // EFFECTS: Creates a game board
     public OthelloGame() {
@@ -30,6 +33,7 @@ public class OthelloGame {
         drawBoard = new DrawBoard(game.getBoard());
         isMenuOpen = false;
         jsonReader = new JsonReader(JSON_STORE);
+        jsonWriter = new JsonWriter(JSON_STORE);
     }
 
     // MODIFIES: this
@@ -51,7 +55,7 @@ public class OthelloGame {
     }
 
     // MODIFIES: this
-    // EFFECTS : Asks for user input and stores it in this. If the user input did not result in a valid move or
+    // EFFECTS : Asks for user input and stores it in this. If the user input did not result in a valid command or
     //           did not follow style requirements, prompts the user to enter a different command.
     //           Reports to the user if their move was valid.
     private void receiveUserInput() {
@@ -60,7 +64,7 @@ public class OthelloGame {
 
         boolean isPiecePlaced = false;
         do {
-            if (rawInput.equalsIgnoreCase("menu")) {
+            while (rawInput.trim().equalsIgnoreCase("menu")) {
                 isMenuOpen = true;
                 while (isMenuOpen) {
                     displayMenu();
@@ -94,15 +98,16 @@ public class OthelloGame {
         System.out.println("\texit -> Exit the menu.");
         System.out.println("\tquit -> Quit the program.");
 
-        System.out.print("Command:  ");
+        System.out.print("Menu Command:  ");
         rawInput = sc.nextLine();
     }
 
     // MODIFIES: this
     // EFFECTS: Calls the appropriate method depending on the menu option selected
     private void processMenuCommand() {
-        switch (rawInput.toLowerCase()) {
+        switch (rawInput.trim().toLowerCase()) {
             case "save":
+                saveGame();
                 break;
             case "load":
                 loadGame();
@@ -114,15 +119,13 @@ public class OthelloGame {
                 displayScore();
                 break;
             case "exit":
-                isMenuOpen = false;
-                System.out.println("The menu has been closed. The current board is: ");
-                drawBoard.printBoard();
-                System.out.print("Please enter a movement command: ");
-                rawInput = sc.nextLine();
+                exitMenu();
                 break;
             case "quit":
                 System.exit(-1);
-            default: printRetryMessage();
+            default:
+                isMenuOpen = false;
+                printRetryMessage();
         }
     }
 
@@ -134,10 +137,33 @@ public class OthelloGame {
             game = jsonReader.read();
             drawBoard = new DrawBoard(game.getBoard());
             System.out.println("Loaded a saved board from " + JSON_STORE);
-            System.out.println(game.getClearPieceCount());
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
         }
+    }
+
+    // EFFECTS: Saves the game board to file
+    //          Code taken from JsonSerializationDemo at https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
+    private void saveGame() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(game);
+            jsonWriter.close();
+            System.out.println("Saved the current game to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to save to " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Exits the menu, prints the current board state and prompts the user for a movement command
+    private void exitMenu() {
+        isMenuOpen = false;
+        System.out.println("The menu has been closed. The current board is: ");
+        drawBoard.printBoard();
+        System.out.println("It is currently " + game.getTurn().toString().toLowerCase() + "'s turn.");
+        System.out.print("Please enter a command: ");
+        rawInput = sc.nextLine();
     }
 
     // EFFECTS: Prints the current score to console
@@ -191,19 +217,10 @@ public class OthelloGame {
         System.out.println("Have fun!");
     }
 
-    // EFFECTS: Prints board state and instructions for the current turn to console
+    // EFFECTS: Prints current board state and instructions for the current turn to console.
     private void printTurnInfo() {
         drawBoard.printBoard();
         System.out.println("Input a placement command in the format <letter><number> e.g. \"A5\"");
-        if (game.getTurn().equals(FILL)) {
-            System.out.println("It is currently fill's turn.");
-        } else if (game.getTurn().equals(CLEAR)) {
-            System.out.println("It is currently clear's turn.");
-        }
-    }
-
-    public static void main(String[] args) {
-        OthelloGame match = new OthelloGame();
-        match.playGame();
+        System.out.println("It is currently " + game.getTurn().toString().toLowerCase() + "'s turn.");
     }
 }

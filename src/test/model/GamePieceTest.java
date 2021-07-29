@@ -1,11 +1,13 @@
 package model;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static model.State.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+// JUnit test class for GamePiece
 class GamePieceTest {
     GamePiece testPiece;
 
@@ -40,5 +42,13 @@ class GamePieceTest {
         testPiece.setState(CLEAR);
         testPiece.flip();
         assertEquals(FILL, testPiece.getState());
+    }
+
+    @Test
+    public void testToJson() {
+        JSONObject testJson = testPiece.toJson();
+
+        assertEquals(0, testJson.getInt("position"));
+        assertEquals(FILL, testJson.get("state"));
     }
 }

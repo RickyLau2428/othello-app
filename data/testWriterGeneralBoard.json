@@ -2,215 +2,215 @@
     "pieces": [
         {
             "position": 0,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 1,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 2,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 3,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 4,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 5,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 6,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 7,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 8,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 9,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 10,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 11,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 12,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 13,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 14,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 15,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 16,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 17,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 18,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 19,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 20,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 21,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 22,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 23,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 24,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 25,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 26,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 27,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 28,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 29,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 30,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 31,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 32,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 33,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 34,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 35,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 36,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 37,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 38,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 39,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 40,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 41,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 42,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 43,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 44,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 45,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 46,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 47,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 48,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 49,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 50,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 51,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 52,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 53,
@@ -258,7 +258,7 @@
         }
     ],
     "gameOverCount": 0,
-    "clearPieceCount": 0,
-    "turn": "FILL",
-    "fillPieceCount": 0
+    "clearPieceCount": 19,
+    "turn": "CLEAR",
+    "fillPieceCount": 34
 }

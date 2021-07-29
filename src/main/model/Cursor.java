@@ -16,7 +16,7 @@ public class Cursor {
         current = position;
     }
 
-    // getters:
+    // getters
     public int getCurrent() {
         return current;
     }
@@ -25,12 +25,14 @@ public class Cursor {
         return original;
     }
 
+    // setters
     public void setCurrent(int position) {
         current = position;
     }
 
     // MODIFIES: this
-    // EFFECTS: Sets the entirety of the cursor to position
+    // EFFECTS: Sets the entirety of the cursor to position. Throws IllegalCursorException if
+    //          the cursor attempts to move outside of the board
     public void setPosition(int position) throws IllegalCursorException {
         if (!(0 <= position && position < BOARD_SIZE)) {
             throw new IllegalCursorException();

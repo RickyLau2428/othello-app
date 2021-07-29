@@ -1,5 +1,6 @@
 package model;
 
+import org.json.JSONArray;
 import persistence.Writable;
 import exceptions.IllegalCursorException;
 import exceptions.IllegalPlayerInputException;
@@ -16,8 +17,8 @@ public class GameBoard implements Writable {
     public static final int SIDE_LENGTH = 8;
     public static final int BOARD_SIZE = SIDE_LENGTH * SIDE_LENGTH;
     public static final int MARGIN = SIDE_LENGTH / 2 - 1;
-    // Q1 through Q4 are the corners closest to the origin on a board with length SIDE_LENGTH corresponding
-    // to their quadrants
+    // Q1 through Q4 are the corners closest to the origin corresponding to their
+    // quadrants on a board with length SIDE_LENGTH
     public static final int Q1 = (SIDE_LENGTH * MARGIN) + (MARGIN + 1);
     public static final int Q2 = (SIDE_LENGTH * MARGIN) + MARGIN;
     public static final int Q3 = (SIDE_LENGTH * (MARGIN + 1)) + MARGIN;
@@ -94,16 +95,17 @@ public class GameBoard implements Writable {
         return gameOverCounter;
     }
 
+
     // setters
-    public void setTurn(State state) {
-        this.turn = state;
-        setValidMoves();
+    public void setGameOverCounter(int num) {
+        this.gameOverCounter = num;
     }
 
     // MODIFIES: this
-    // EFFECTS: Adds a game piece to the board (to preserve order, must only be used when loading from file).
-    public void addGamePiece(GamePiece gp) {
-        board.add(gp);
+    // EFFECTS: Sets the current turn and generates all currently valid moves
+    public void setTurn(State state) {
+        this.turn = state;
+        setValidMoves();
     }
 
     // MODIFIES: this
@@ -114,10 +116,6 @@ public class GameBoard implements Writable {
         } else if (state.equals(CLEAR)) {
             clearPieceCount = num;
         }
-    }
-
-    public void setGameOverCounter(int num) {
-        this.gameOverCounter = num;
     }
 
     // MODIFIES: this
@@ -164,7 +162,7 @@ public class GameBoard implements Writable {
     // EFFECTS: Checks strings for appropriate conditions and processes it for later translation.
     //          Throws an IllegalPlayerInputException if input is invalid.
     public String sanitizeInput(String input) throws IllegalPlayerInputException {
-        String processed = input.toUpperCase();
+        String processed = input.trim().toUpperCase();
         if (processed.length() != 2
                 || (processed.charAt(0) < 'A' || processed.charAt(0) > 'H')
                 || (processed.charAt(1) < '1' || processed.charAt(1) > '8')) {
@@ -173,7 +171,7 @@ public class GameBoard implements Writable {
         return processed;
     }
 
-    // EFFECTS: Translates an index position on the board (0 to 63) to a player input command
+    // EFFECTS: Translates an index position on the board to a player input command.
     public String indexToCommand(int position) {
         char letter = (char) ((position % 8) + 'A');
         char num = (char) ((position / 8) + '1');
@@ -183,7 +181,7 @@ public class GameBoard implements Writable {
 
     // MODIFIES: this
     // EFFECTS: If no valid moves can be made, increments gameOverCounter by 1, advances the game to the next turn
-    //          and returns false. Does nothing and returns true if there are any valid moves.
+    //          and returns false. Does nothing and returns true if there are valid moves.
     public boolean checkAnyValidMoves() {
         if (validMoves.isEmpty()) {
             gameOverCounter++;
@@ -194,7 +192,7 @@ public class GameBoard implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: Progresses the game to the next player's turn and stores any valid moves.
+    // EFFECTS: Advances the game to the next player's turn and stores any valid moves.
     public void nextTurn() {
         if (turn.equals(FILL)) {
             turn = CLEAR;
@@ -205,8 +203,9 @@ public class GameBoard implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: places a game piece at position, flips other game pieces as needed and updates the fill and clear
-    //          piece counters. Advances the game to the next turn - returns true if successful, false otherwise.
+    // EFFECTS: If valid, places a game piece at position, flips other game pieces as needed and updates the fill
+    //          and clear piece counters. Advances the game to the next turn.
+    //          Returns true if successful, false otherwise.
     public boolean placePiece(int position) {
         if (validMoves.containsKey(position)) {
             board.get(position).setState(turn);
@@ -255,7 +254,7 @@ public class GameBoard implements Writable {
     //          if it attempts to move illegally.
     public void checkDirection(State turn, int direction) {
         try {
-            List<GamePiece> potentialFlips = new ArrayList<>();
+            List<GamePiece> potentialFlips = new LinkedList<>();
             moveCursorDirection(direction);
             GamePiece toCheck = board.get(cursor.getCurrent());
 
@@ -329,6 +328,23 @@ public class GameBoard implements Writable {
     // EFFECTS: Returns this as a JSON Object
     @Override
     public JSONObject toJson() {
-        return new JSONObject();
+        JSONObject json = new JSONObject();
+        json.put("turn", turn);
+        json.put("clearPieceCount", clearPieceCount);
+        json.put("fillPieceCount", fillPieceCount);
+        json.put("gameOverCount", gameOverCounter);
+        json.put("pieces", piecesToJson());
+        return json;
+    }
+
+    // EFFECTS: Returns this.board as a JSON Array
+    private JSONArray piecesToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (GamePiece piece : board) {
+            jsonArray.put(piece.toJson());
+        }
+
+        return jsonArray;
     }
 }

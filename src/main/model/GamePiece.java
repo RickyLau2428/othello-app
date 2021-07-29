@@ -5,7 +5,7 @@ import persistence.Writable;
 
 import static model.State.*;
 
-// Holds information for each game piece on the board (i.e. its position and current status)
+// Represents a game piece on the board
 public class GamePiece implements Writable {
     private State state;
     private final int position;
@@ -31,7 +31,7 @@ public class GamePiece implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: Changes this.state from FILL to CLEAR or vice versa. Does nothing
+    // EFFECTS: Changes the piece's state from FILL to CLEAR or vice versa. Does nothing
     //          if state is EMPTY.
     public void flip() {
         if (state.equals(FILL)) {
@@ -42,7 +42,12 @@ public class GamePiece implements Writable {
     }
 
     @Override
+    // EFFECTS: Returns this as a JSON object
     public JSONObject toJson() {
-        return new JSONObject();
+        JSONObject json = new JSONObject();
+        json.put("position", position);
+        json.put("state", state);
+
+        return json;
     }
 }

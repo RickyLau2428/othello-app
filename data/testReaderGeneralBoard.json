@@ -2,7 +2,7 @@
     "pieces": [
         {
             "position": 0,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 1,
@@ -38,7 +38,7 @@
         },
         {
             "position": 9,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 10,
@@ -70,11 +70,11 @@
         },
         {
             "position": 17,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 18,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 19,
@@ -82,7 +82,7 @@
         },
         {
             "position": 20,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 21,
@@ -90,7 +90,7 @@
         },
         {
             "position": 22,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 23,
@@ -102,51 +102,51 @@
         },
         {
             "position": 25,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 26,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 27,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 28,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 29,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 30,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 31,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 32,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 33,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 34,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 35,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 36,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 37,
@@ -154,7 +154,7 @@
         },
         {
             "position": 38,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 39,
@@ -170,11 +170,11 @@
         },
         {
             "position": 42,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 43,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 44,
@@ -198,19 +198,19 @@
         },
         {
             "position": 49,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 50,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 51,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 52,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 53,
@@ -226,7 +226,7 @@
         },
         {
             "position": 56,
-            "state": "EMPTY"
+            "state": "CLEAR"
         },
         {
             "position": 57,
@@ -238,7 +238,7 @@
         },
         {
             "position": 59,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 60,
@@ -258,7 +258,7 @@
         }
     ],
     "gameOverCount": 0,
-    "clearPieceCount": 0,
-    "turn": "FILL",
-    "fillPieceCount": 0
+    "clearPieceCount": 16,
+    "turn": "CLEAR",
+    "fillPieceCount": 11
 }
