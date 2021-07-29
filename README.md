@@ -9,6 +9,7 @@ played on a computer, faithful to the original rules as provided by the World Ot
 As a quick summary, my application will be able to: 
 * Do whatever an Othello board can do and **more**.
 * Store a current game to be finished at another time.
+* Upon request, provide a list of all valid moves that can be taken.  
 * (Pending - more things to be added as I think of them)
 
 ## Who is this for?
@@ -25,6 +26,7 @@ played the game before, but I felt that it translated into a program fairly well
 * As a user, I want to be able to place a piece on the board, thus capturing opponent pieces
 * As a user, I want to be able to start an Othello game with the correct starting configuration
 * As a user, I want to be able to end a game of Othello and determine who the superior Othello player is.
+* As a user, I want to be able to request for and see a list of all currently valid moves.
 * As a user, I want to be able to see the final score of an Othello match.
 * As a user, I want to be able to save an ongoing match to .
 * As a user, I want to be able to load an ongoing match from file.

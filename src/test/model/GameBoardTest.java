@@ -67,7 +67,6 @@ public class GameBoardTest {
         } catch (IllegalPlayerInputException e) {
             fail("Exception not expected.");
         }
-
     }
 
     @Test
@@ -78,7 +77,13 @@ public class GameBoardTest {
         } catch (IllegalPlayerInputException e) {
 
         }
+    }
 
+    @Test
+    public void testIndexToCommand() {
+        assertEquals("A1", testBoard.indexToCommand(0));
+        assertEquals("H8", testBoard.indexToCommand(63));
+        assertEquals("D5", testBoard.indexToCommand(35));
     }
 
     @Test
@@ -137,8 +142,12 @@ public class GameBoardTest {
     @Test
     public void testPlacePieceEmptyBoardFailure() {
         testBoard.setTurn(FILL);
+        countPieces();
+
         assertFalse(testBoard.placePiece(7));
         assertEquals(0, getActivePiecesNum());
+        assertEquals(0, testBoard.getFillPieceCount());
+        assertEquals(0, testBoard.getClearPieceCount());
     }
 
     @Test
@@ -147,9 +156,11 @@ public class GameBoardTest {
             setPiece(i, FILL);
         }
         testBoard.setTurn(FILL);
+        countPieces();
 
         assertFalse(testBoard.placePiece(8));
         assertEquals(64, getActivePiecesNum());
+        assertEquals(64, testBoard.getFillPieceCount());
     }
 
     @Test
@@ -157,9 +168,12 @@ public class GameBoardTest {
         setPiece(3, CLEAR);
         setPiece(4, FILL);
         testBoard.setTurn(FILL);
+        countPieces();
 
         assertFalse(testBoard.placePiece(50));
         assertEquals(2, getActivePiecesNum());
+        assertEquals(1, testBoard.getClearPieceCount());
+        assertEquals(1, testBoard.getFillPieceCount());
     }
 
     @Test
@@ -169,6 +183,7 @@ public class GameBoardTest {
         }
         setPiece(22, FILL);
         setPiece(23, CLEAR);
+        countPieces();
 
         testBoard.setTurn(FILL);
         assertTrue(testBoard.placePiece(17));
@@ -177,6 +192,8 @@ public class GameBoardTest {
         }
         assertEquals(CLEAR, getPieceState(23));
         assertEquals(7, getActivePiecesNum());
+        assertEquals(6, testBoard.getFillPieceCount());
+        assertEquals(1, testBoard.getClearPieceCount());
 
         // CLEAR'S turn
         assertTrue(testBoard.placePiece(16));
@@ -184,6 +201,8 @@ public class GameBoardTest {
             assertEquals(CLEAR, getPieceState(i));
         }
         assertEquals(8, getActivePiecesNum());
+        assertEquals(8, testBoard.getClearPieceCount());
+        assertEquals(0, testBoard.getFillPieceCount());
     }
 
     @Test
@@ -192,11 +211,14 @@ public class GameBoardTest {
         setPiece(28, CLEAR);
         testBoard.setTurn(CLEAR);
         assertTrue(testBoard.placePiece(26));
+        countPieces();
 
         assertEquals(CLEAR, getPieceState(26));
         assertEquals(CLEAR, getPieceState(27));
         assertEquals(CLEAR, getPieceState(28));
         assertEquals(3, getActivePiecesNum());
+        assertEquals(3, testBoard.getClearPieceCount());
+        assertEquals(0, testBoard.getFillPieceCount());
     }
 
     @Test
@@ -206,6 +228,7 @@ public class GameBoardTest {
         }
         setPiece(7, FILL);
         testBoard.setTurn(FILL);
+        countPieces();
 
         assertTrue(testBoard.placePiece(0));
 
@@ -213,6 +236,8 @@ public class GameBoardTest {
             assertEquals(FILL, getPieceState(i));
         }
         assertEquals(8, getActivePiecesNum());
+        assertEquals(8, testBoard.getFillPieceCount());
+        assertEquals(0, testBoard.getClearPieceCount());
     }
 
     @Test
@@ -221,11 +246,14 @@ public class GameBoardTest {
         setPiece(21, CLEAR);
         testBoard.setTurn(FILL);
         assertTrue(testBoard.placePiece(22));
+        countPieces();
 
         for (int i = 20; i <= 22; i++) {
             assertEquals(FILL, getPieceState(i));
         }
         assertEquals(3, getActivePiecesNum());
+        assertEquals(3, testBoard.getFillPieceCount());
+        assertEquals(0, testBoard.getClearPieceCount());
     }
 
     @Test
@@ -235,12 +263,16 @@ public class GameBoardTest {
         }
         setPiece(56, CLEAR);
         testBoard.setTurn(CLEAR);
+        countPieces();
+
         assertTrue(testBoard.placePiece(63));
 
         for (int i = 56; i <= 63; i++) {
             assertEquals(CLEAR, getPieceState(i));
         }
         assertEquals(8, getActivePiecesNum());
+        assertEquals(8, testBoard.getClearPieceCount());
+        assertEquals(0, testBoard.getFillPieceCount());
     }
 
     @Test
@@ -249,12 +281,16 @@ public class GameBoardTest {
         setPiece(35, CLEAR);
 
         testBoard.setTurn(CLEAR);
+        countPieces();
+
         assertTrue(testBoard.placePiece(19));
 
         for (int i = 19; i <= 35; i += 8) {
             assertEquals(CLEAR, getPieceState(i));
         }
         assertEquals(3, getActivePiecesNum());
+        assertEquals(3, testBoard.getClearPieceCount());
+        assertEquals(0, testBoard.getFillPieceCount());
     }
 
     @Test
@@ -265,12 +301,16 @@ public class GameBoardTest {
         setPiece(56, FILL);
 
         testBoard.setTurn(FILL);
+        countPieces();
+
         assertTrue(testBoard.placePiece(0));
 
         for (int i = 0; i <= 56; i += 8) {
             assertEquals(FILL, getPieceState(i));
         }
         assertEquals(8, getActivePiecesNum());
+        assertEquals(8, testBoard.getFillPieceCount());
+        assertEquals(0, testBoard.getClearPieceCount());
     }
 
     @Test
@@ -279,12 +319,16 @@ public class GameBoardTest {
         setPiece(22, FILL);
 
         testBoard.setTurn(FILL);
+        countPieces();
+
         assertTrue(testBoard.placePiece(38));
 
         for (int i = 22; i <= 38; i += 8) {
             assertEquals(FILL, getPieceState(i));
         }
         assertEquals(3, getActivePiecesNum());
+        assertEquals(3, testBoard.getFillPieceCount());
+        assertEquals(0, testBoard.getClearPieceCount());
     }
 
     @Test
@@ -295,12 +339,16 @@ public class GameBoardTest {
         setPiece(7, CLEAR);
 
         testBoard.setTurn(CLEAR);
+        countPieces();
+
         assertTrue(testBoard.placePiece(63));
 
         for (int i = 7; i <= 63; i += 8) {
             assertEquals(CLEAR, getPieceState(i));
         }
         assertEquals(8, getActivePiecesNum());
+        assertEquals(8, testBoard.getClearPieceCount());
+        assertEquals(0, testBoard.getFillPieceCount());
     }
 
     @Test
@@ -309,12 +357,16 @@ public class GameBoardTest {
         setPiece(19, FILL);
 
         testBoard.setTurn(CLEAR);
+        countPieces();
+
         assertTrue(testBoard.placePiece(12));
 
         for (int i = 12; i <= 27; i += 7) {
             assertEquals(CLEAR, getPieceState(i));
         }
         assertEquals(3, getActivePiecesNum());
+        assertEquals(3, testBoard.getClearPieceCount());
+        assertEquals(0, testBoard.getFillPieceCount());
     }
 
     @Test
@@ -323,6 +375,8 @@ public class GameBoardTest {
             setPiece(i, CLEAR);
         }
         setPiece(56, FILL);
+        countPieces();
+
         testBoard.setTurn(FILL);
 
         assertTrue(testBoard.placePiece(7));
@@ -331,6 +385,8 @@ public class GameBoardTest {
             assertEquals(FILL, getPieceState(i));
         }
         assertEquals(8, getActivePiecesNum());
+        assertEquals(8, testBoard.getFillPieceCount());
+        assertEquals(0, testBoard.getClearPieceCount());
     }
 
     @Test
@@ -338,6 +394,7 @@ public class GameBoardTest {
         setPiece(35, CLEAR);
         setPiece(44, FILL);
         testBoard.setTurn(FILL);
+        countPieces();
 
         assertTrue(testBoard.placePiece(26));
 
@@ -345,6 +402,8 @@ public class GameBoardTest {
             assertEquals(FILL, getPieceState(i));
         }
         assertEquals(3, getActivePiecesNum());
+        assertEquals(3, testBoard.getFillPieceCount());
+        assertEquals(0, testBoard.getClearPieceCount());
     }
 
     @Test
@@ -353,6 +412,7 @@ public class GameBoardTest {
             setPiece(i, FILL);
         }
         setPiece(63, CLEAR);
+        countPieces();
         testBoard.setTurn(CLEAR);
 
         assertTrue(testBoard.placePiece(0));
@@ -361,6 +421,8 @@ public class GameBoardTest {
             assertEquals(CLEAR, getPieceState(i));
         }
         assertEquals(8, getActivePiecesNum());
+        assertEquals(8, testBoard.getClearPieceCount());
+        assertEquals(0, testBoard.getFillPieceCount());
     }
 
     @Test
@@ -368,6 +430,7 @@ public class GameBoardTest {
         setPiece(42, CLEAR);
         setPiece(51, FILL);
         testBoard.setTurn(CLEAR);
+        countPieces();
 
         assertTrue(testBoard.placePiece(60));
 
@@ -375,6 +438,8 @@ public class GameBoardTest {
             assertEquals(CLEAR, getPieceState(i));
         }
         assertEquals(3, getActivePiecesNum());
+        assertEquals(3, testBoard.getClearPieceCount());
+        assertEquals(0, testBoard.getFillPieceCount());
     }
 
     @Test
@@ -384,6 +449,7 @@ public class GameBoardTest {
         }
         setPiece(0, FILL);
         testBoard.setTurn(FILL);
+        countPieces();
 
         assertTrue(testBoard.placePiece(63));
 
@@ -391,6 +457,8 @@ public class GameBoardTest {
             assertEquals(FILL, getPieceState(i));
         }
         assertEquals(8, getActivePiecesNum());
+        assertEquals(8, testBoard.getFillPieceCount());
+        assertEquals(0, testBoard.getClearPieceCount());
     }
 
     @Test
@@ -424,6 +492,7 @@ public class GameBoardTest {
             }
         }
         testBoard.setTurn(FILL);
+        countPieces();
 
         assertTrue(testBoard.placePiece(27));
 
@@ -440,6 +509,8 @@ public class GameBoardTest {
             assertEquals(FILL, getPieceState(i));
         }
         assertEquals(28, getActivePiecesNum());
+        assertEquals(28, testBoard.getFillPieceCount());
+        assertEquals(0, testBoard.getClearPieceCount());
     }
 
     @Test
@@ -487,9 +558,7 @@ public class GameBoardTest {
 
         testBoard.checkGameOver();
         assertTrue(testBoard.isGameOver());
-        assertEquals(EMPTY, testBoard.endGame());
-        assertEquals(32, testBoard.getClearPieceCount());
-        assertEquals(32, testBoard.getFillPieceCount());
+        assertEquals(EMPTY, testBoard.declareVictor());
     }
 
     @Test
@@ -507,7 +576,8 @@ public class GameBoardTest {
 
         testBoard.checkGameOver();
         assertTrue(testBoard.isGameOver());
-        assertEquals(CLEAR, testBoard.endGame());
+        countPieces();
+        assertEquals(CLEAR, testBoard.declareVictor());
         assertEquals(24, testBoard.getClearPieceCount());
         assertEquals(5, testBoard.getFillPieceCount());
     }
@@ -527,7 +597,8 @@ public class GameBoardTest {
 
         testBoard.checkGameOver();
         assertTrue(testBoard.isGameOver());
-        assertEquals(FILL, testBoard.endGame());
+        countPieces();
+        assertEquals(FILL, testBoard.declareVictor());
         assertEquals(24, testBoard.getFillPieceCount());
         assertEquals(5, testBoard.getClearPieceCount());
     }
@@ -560,5 +631,21 @@ public class GameBoardTest {
                 g.setState(EMPTY);
             }
         }
+    }
+
+    // EFFECTS: Counts all pieces on the board and stores them in their respective local counters. Does nothing
+    //          if piece state is EMPTY
+    private void countPieces() {
+        int clearPieceCounter = 0;
+        int fillPieceCounter = 0;
+        for (int i = 0; i <= 63; i++) {
+            if (getPieceState(i).equals(CLEAR)) {
+                clearPieceCounter++;
+            } else if (getPieceState(i).equals(FILL)) {
+                fillPieceCounter++;
+            }
+        }
+        testBoard.setPieceCount(CLEAR, clearPieceCounter);
+        testBoard.setPieceCount(FILL, fillPieceCounter);
     }
 }

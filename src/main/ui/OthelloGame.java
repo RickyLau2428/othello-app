@@ -17,12 +17,14 @@ public class OthelloGame {
     private Scanner sc;
     private DrawBoard drawBoard;
     private String rawInput;
+    private boolean isMenuOpen;
 
     // EFFECTS: Creates a game board
     public OthelloGame() {
         game = new GameBoard();
         sc = new Scanner(System.in);
         drawBoard = new DrawBoard(game.getBoard());
+        isMenuOpen = false;
     }
 
     // MODIFIES: this
@@ -50,8 +52,16 @@ public class OthelloGame {
     private void receiveUserInput() {
         System.out.print("Command: ");
         rawInput = sc.nextLine();
-        boolean isPiecePlaced = false;
 
+        if (rawInput.equalsIgnoreCase("menu")) {
+            isMenuOpen = true;
+            while (isMenuOpen) {
+                displayMenu();
+                processMenuCommand();
+            }
+        }
+
+        boolean isPiecePlaced = false;
         do {
             try {
                 isPiecePlaced = game.placePiece(game.translateInput(rawInput));
@@ -69,6 +79,63 @@ public class OthelloGame {
     }
 
     // MODIFIES: this
+    // EFFECTS: Displays the game menu and prompts the user to select an option
+    private void displayMenu() {
+        System.out.println("Welcome to the menu: Select one of the following options.");
+        System.out.println("\tsave -> Save the current game to file.");
+        System.out.println("\tload -> Load the previous game from file.");
+        System.out.println("\thelp -> See all currently valid moves.");
+        System.out.println("\tscore -> See the current score.");
+        System.out.println("\texit -> Exit the menu.");
+        System.out.println("\tquit -> Quit the program.");
+
+        System.out.print("Command:  ");
+        rawInput = sc.nextLine();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Calls the appropriate method depending on the menu option selected
+    private void processMenuCommand() {
+        switch (rawInput.toLowerCase()) {
+            case "save":
+                break;
+            case "load":
+                break;
+            case "help":
+                displayValidMoves();
+                break;
+            case "score":
+                displayScore();
+                break;
+            case "exit":
+                isMenuOpen = false;
+                System.out.println("The menu has been closed. The current board is: ");
+                drawBoard.printBoard();
+                System.out.print("Please enter a movement command: ");
+                rawInput = sc.nextLine();
+                break;
+            case "quit":
+                System.exit(-1);
+            default: printRetryMessage();
+        }
+    }
+
+    // EFFECTS: Prints the current score to console
+    private void displayScore() {
+        System.out.println("The current score is " + game.getFillPieceCount() + " for fill and "
+                + game.getClearPieceCount() + " for clear.");
+    }
+
+    // EFFECTS: Prints all valid moves to console
+    private void displayValidMoves() {
+        System.out.print("Currently valid moves are: ");
+        for (int pos : game.getValidMoves().keySet()) {
+            System.out.print(game.indexToCommand(pos) + "; ");
+        }
+        System.out.println();
+    }
+
+    // MODIFIES: this
     // EFFECTS: Prompts the user to re-enter a valid command and stores it in this
     private void printRetryMessage() {
         System.out.print("Please enter a valid command: ");
@@ -81,7 +148,7 @@ public class OthelloGame {
         System.out.println("The game is now over. Calculating score...");
         System.out.println("The final board state was: ");
         drawBoard.printBoard();
-        State victor = game.endGame();
+        State victor = game.declareVictor();
 
         System.out.println("The superior Othello player is...");
         if (victor.equals(CLEAR)) {
@@ -100,6 +167,7 @@ public class OthelloGame {
         System.out.println("Welcome to IoMoth's Othello implementation! To reduce ambiguity, black and "
                 + "white pieces are labeled as fill and clear respectively. Fill game pieces are represented by "
                 + FILLED_CIRCLE + " and clear pieces are represented by " + CLEAR_CIRCLE + ".");
+        System.out.println("Access the menu at any time by typing \"menu\".");
         System.out.println("Have fun!");
     }
 

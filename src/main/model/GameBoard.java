@@ -1,7 +1,10 @@
 package model;
 
+import org.json.JSONArray;
+import persistence.Writeable;
 import exceptions.IllegalCursorException;
 import exceptions.IllegalPlayerInputException;
+import org.json.JSONObject;
 
 import java.util.*;
 
@@ -9,7 +12,7 @@ import static model.State.*;
 
 // Represents a game of Othello played on a square board with side length SIDE_LENGTH. Each square on the board is
 // represented by a number ranging from 0 to 63, increasing from left to right and from top to bottom.
-public class GameBoard {
+public class GameBoard implements Writeable {
     // INVARIANT: SIDE_LENGTH must be 8
     public static final int SIDE_LENGTH = 8;
     public static final int BOARD_SIZE = SIDE_LENGTH * SIDE_LENGTH;
@@ -36,7 +39,6 @@ public class GameBoard {
         for (int i = 0; i < BOARD_SIZE; i++) {
             board.add(new GamePiece(i, EMPTY));
         }
-        setUpGame();
         turn = FILL;
         validMoves = new HashMap<>();
         cursor = new Cursor(0);
@@ -44,6 +46,8 @@ public class GameBoard {
         clearPieceCount = 0;
         fillPieceCount = 0;
         gameOverCounter = 0;
+
+        setUpGame();
         setValidMoves();
     }
 
@@ -82,8 +86,18 @@ public class GameBoard {
         setValidMoves();
     }
 
+    // MODIFIES: this
+    // EFFECTS: Sets the piece counter for the given state to num
+    public void setPieceCount(State state, int num) {
+        if (state.equals(FILL)) {
+            fillPieceCount = num;
+        } else if (state.equals(CLEAR)) {
+            clearPieceCount = num;
+        }
+    }
+
     public void setGameOverCounter(int num) {
-        this.gameOverCounter = 0;
+        this.gameOverCounter = num;
     }
 
     // MODIFIES: this
@@ -93,19 +107,13 @@ public class GameBoard {
         board.get(Q2).setState(CLEAR);
         board.get(Q3).setState(FILL);
         board.get(Q4).setState(CLEAR);
+        clearPieceCount = 2;
+        fillPieceCount = 2;
     }
 
     // MODIFIES: this
-    // EFFECTS: Counts the total number of fill and clear pieces on the board and updates corresponding fields.
-    //          Returns the winner of the match, or EMPTY if it is a tie.
-    public State endGame() {
-        for (GamePiece piece : board) {
-            if (piece.getState().equals(CLEAR)) {
-                clearPieceCount++;
-            } else if (piece.getState().equals(FILL)) {
-                fillPieceCount++;
-            }
-        }
+    // EFFECTS: Returns the winner of the match, or EMPTY if it is a tie.
+    public State declareVictor() {
         if (clearPieceCount > fillPieceCount) {
             return CLEAR;
         } else if (fillPieceCount > clearPieceCount) {
@@ -145,6 +153,14 @@ public class GameBoard {
         return processed;
     }
 
+    // EFFECTS: Translates an index position on the board (0 to 63) to a player input command
+    public String indexToCommand(int position) {
+        char letter = (char) ((position % 8) + 'A');
+        char num = (char) ((position / 8) + '1');
+
+        return String.valueOf(letter) + num;
+    }
+
     // MODIFIES: this
     // EFFECTS: If no valid moves can be made, increments gameOverCounter by 1, advances the game to the next turn
     //          and returns false. Does nothing and returns true if there are any valid moves.
@@ -169,14 +185,23 @@ public class GameBoard {
     }
 
     // MODIFIES: this
-    // EFFECTS: places a game piece at position, flips other game pieces as needed and advances the game to the
-    //          next turn. Returns true if successful, false otherwise.
+    // EFFECTS: places a game piece at position, flips other game pieces as needed and updates the fill and clear
+    //          piece counters. Advances the game to the next turn - returns true if successful, false otherwise.
     public boolean placePiece(int position) {
         if (validMoves.containsKey(position)) {
             board.get(position).setState(turn);
             for (GamePiece piece : validMoves.get(position)) {
                 piece.flip();
             }
+
+            if (turn.equals(FILL)) {
+                fillPieceCount += (validMoves.get(position).size() + 1);
+                clearPieceCount -= validMoves.get(position).size();
+            } else {
+                fillPieceCount -= validMoves.get(position).size();
+                clearPieceCount += (validMoves.get(position).size() + 1);
+            }
+
             nextTurn();
             return true;
         }
@@ -279,5 +304,11 @@ public class GameBoard {
             default:
                 cursor.moveCursorUpperLeft();
         }
+    }
+
+    // EFFECTS: Returns this as a JSON Object
+    @Override
+    public JSONObject toJson() {
+        return new JSONObject();
     }
 }
