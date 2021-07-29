@@ -132,13 +132,13 @@ public class GameBoard implements Writable {
     // MODIFIES: this
     // EFFECTS: Returns the winner of the match, or EMPTY if it is a tie.
     public State declareVictor() {
+        State victor = EMPTY;
         if (clearPieceCount > fillPieceCount) {
-            return CLEAR;
+            victor = CLEAR;
         } else if (fillPieceCount > clearPieceCount) {
-            return FILL;
-        } else {
-            return EMPTY;
+            victor = FILL;
         }
+        return victor;
     }
 
     // MODIFIES: this
@@ -183,12 +183,13 @@ public class GameBoard implements Writable {
     // EFFECTS: If no valid moves can be made, increments gameOverCounter by 1, advances the game to the next turn
     //          and returns false. Does nothing and returns true if there are valid moves.
     public boolean checkAnyValidMoves() {
+        boolean anyValidMoves = true;
         if (validMoves.isEmpty()) {
             gameOverCounter++;
             nextTurn();
-            return false;
+            anyValidMoves = false;
         }
-        return true;
+        return anyValidMoves;
     }
 
     // MODIFIES: this
@@ -207,6 +208,7 @@ public class GameBoard implements Writable {
     //          and clear piece counters. Advances the game to the next turn.
     //          Returns true if successful, false otherwise.
     public boolean placePiece(int position) {
+        boolean isPiecePlaced = false;
         if (validMoves.containsKey(position)) {
             board.get(position).setState(turn);
             for (GamePiece piece : validMoves.get(position)) {
@@ -222,9 +224,10 @@ public class GameBoard implements Writable {
             }
 
             nextTurn();
-            return true;
+            isPiecePlaced = true;
         }
-        return false;
+
+        return isPiecePlaced;
     }
 
     // MODIFIES: this

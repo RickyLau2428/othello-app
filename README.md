@@ -28,5 +28,5 @@ played the game before, but I felt that it translated into a program fairly well
 * As a user, I want to be able to end a game of Othello and determine who the superior Othello player is.
 * As a user, I want to be able to request for and see a list of all currently valid moves.
 * As a user, I want to be able to see the final score of an Othello match.
-* As a user, I want to be able to save an ongoing match to .
+* As a user, I want to be able to save an ongoing match to file.
 * As a user, I want to be able to load an ongoing match from file.
