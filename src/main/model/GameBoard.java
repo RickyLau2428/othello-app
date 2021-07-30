@@ -162,7 +162,7 @@ public class GameBoard implements Writable {
     // EFFECTS: Checks strings for appropriate conditions and processes it for later translation.
     //          Throws an IllegalPlayerInputException if input is invalid.
     public String sanitizeInput(String input) throws IllegalPlayerInputException {
-        String processed = input.trim().toUpperCase();
+        String processed = input.toUpperCase();
         if (processed.length() != 2
                 || (processed.charAt(0) < 'A' || processed.charAt(0) > 'H')
                 || (processed.charAt(1) < '1' || processed.charAt(1) > '8')) {

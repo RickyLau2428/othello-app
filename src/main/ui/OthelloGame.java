@@ -19,8 +19,8 @@ import static ui.DrawBoard.CLEAR_CIRCLE;
 // Represents a running match of Othello that interacts directly with the user(s)
 public class OthelloGame {
     private static final String SAVE_DIRECTORY = "./data";
-    private String saveLocation;
-    private String jsonStore = "./data/gameBoard.json";
+    private String jsonCursor;
+    private String jsonStore = "./data/startBoard.json";
 
     private GameBoard game;
     private Scanner sc;
@@ -36,21 +36,18 @@ public class OthelloGame {
         sc = new Scanner(System.in);
         drawBoard = new DrawBoard(game.getBoard());
         isMenuOpen = false;
-        jsonReader = new JsonReader(jsonStore);
-        jsonWriter = new JsonWriter(jsonStore);
-    }
-
-    public String getSaveLocation() {
-        return saveLocation;
-    }
-
-    public void setSaveLocation(String fileName) {
-        saveLocation = fileName;
-        jsonStore = "./data/" + saveLocation + ".json";
+        jsonReader = new JsonReader(jsonCursor);
+        jsonWriter = new JsonWriter(jsonCursor);
     }
 
     // MODIFIES: this
-    // EFFECTS: Starts the game and keeps it running until the game ends
+    // EFFECTS: Sets the file path to a file (potentially non-existent) in ./data
+    public void setFileCursor(String fileName) {
+        jsonCursor = "./data/" + fileName + ".json";
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Starts the game and keeps it running until the game ends, at which point it deletes the game file.
     public void playGame() {
         printWelcomeMessage();
         game.setValidMoves();
@@ -65,6 +62,7 @@ public class OthelloGame {
             receiveUserInput();
         }
         printEndMessage();
+        deleteCurrentMatch();
     }
 
     // MODIFIES: this
@@ -73,11 +71,11 @@ public class OthelloGame {
     //           Reports to the user if their move was valid.
     private void receiveUserInput() {
         System.out.print("Command: ");
-        rawInput = sc.nextLine();
+        rawInput = sc.nextLine().trim().toLowerCase();
 
         boolean isPiecePlaced = false;
         do {
-            while (rawInput.trim().equalsIgnoreCase("menu")) {
+            while (rawInput.trim().equals("menu")) {
                 isMenuOpen = true;
                 while (isMenuOpen) {
                     displayMenu();
@@ -102,28 +100,28 @@ public class OthelloGame {
 
     // MODIFIES: this
     // EFFECTS: Displays the game menu and prompts the user to select an option
-    private void displayMenu() {
+    public void displayMenu() {
         System.out.println("Welcome to the menu: Select one of the following options.");
         System.out.println("\tsave -> Save the current game to file.");
         System.out.println("\tload -> Load the previous game from file.");
+        System.out.println("\tdel  -> Delete a specified game from file");
         System.out.println("\thelp -> See all currently valid moves.");
         System.out.println("\tscore -> See the current score.");
         System.out.println("\texit -> Exit the menu.");
         System.out.println("\tquit -> Quit the program.");
 
-        System.out.print("Menu Command:  ");
-        rawInput = sc.nextLine();
+        System.out.print("Menu Command: ");
+        rawInput = sc.nextLine().trim().toLowerCase();
     }
 
     // MODIFIES: this
     // EFFECTS: Calls the appropriate method depending on the menu option selected
-    private void processMenuCommand() {
-        switch (rawInput.trim().toLowerCase()) {
+    public void processMenuCommand() {
+        switch (rawInput) {
             case "save":
-                saveGame();
-                break;
             case "load":
-                loadGame();
+            case "del":
+                processMemoryCommands();
                 break;
             case "help":
                 displayValidMoves();
@@ -142,14 +140,36 @@ public class OthelloGame {
         }
     }
 
+    // EFFECTS: Extension of processMenuCommands - handles save/load/delete exclusively
+    private void processMemoryCommands() {
+        switch (rawInput) {
+            case "save":
+                saveGame();
+                break;
+            case "load":
+                loadGame();
+                break;
+            case "del":
+                deleteGame();
+                break;
+            default:
+                printRetryMessage();
+                processMenuCommand();
+        }
+    }
+
     // MODIFIES: this
-    // EFFECTS: Sets the current board state to one loaded from JSON_STORE
+    // EFFECTS: Sets the current board to one loaded from memory
     //          Code taken from JsonSerializationDemo at https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
     private void loadGame() {
-        listSaves();
+        if (!listSaves()) {
+            return;
+        }
+
         System.out.print("Please choose a game to load: ");
         String source = sc.nextLine();
-        setSaveLocation(source);
+        setFileCursor(source);
+        jsonStore = jsonCursor;
         jsonReader.setSource(jsonStore);
         try {
             game = jsonReader.read();
@@ -158,17 +178,73 @@ public class OthelloGame {
             game.setValidMoves();
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + jsonStore);
-            loadGame();
         }
     }
 
-    // EFFECTS: Prints the the names of save files (.json files) stored in ./data to console
-    private void listSaves() {
+    // EFFECTS: Saves the game board to file
+    //          Code taken from JsonSerializationDemo at https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
+    private void saveGame() {
+        listSaves();
+        System.out.print("Please input the name for your save file (existing or new): ");
+        String destination = sc.nextLine();
+        setFileCursor(destination);
+        jsonWriter.setDestination(jsonCursor);
+        try {
+            jsonWriter.open();
+            jsonWriter.write(game);
+            jsonWriter.close();
+            System.out.println("Saved the current game to " + jsonCursor);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to save to " + jsonCursor);
+        }
+    }
+
+    // EFFECTS: Deletes the save file with the name given on prompt
+    private void deleteGame() {
+        listSaves();
+        System.out.print("Please input the name of the file you wish to delete: ");
+        String toDelete = sc.nextLine();
+        setFileCursor(toDelete);
+        File fileToDelete = new File(jsonCursor);
+
+        System.out.print("You are about to delete \"" + toDelete + "\". This change is irreversible. "
+                + "Are you sure? [y/n] ");
+        String confirmation = sc.nextLine().trim().toLowerCase();
+
+        if ((confirmation.length() == 1 && confirmation.equals("y"))
+                || (confirmation.length() == 3 && confirmation.equals("yes"))) {
+            if (fileToDelete.delete()) {
+                System.out.println("The file \"" + toDelete + "\" has been deleted.");
+            } else {
+                System.out.println("Could not delete \"" + toDelete + "\".");
+            }
+        }
+        System.out.println("Now exiting deletion menu...");
+    }
+
+    // EFFECTS: Deletes the current match from file
+    private void deleteCurrentMatch() {
+        File currentMatch = new File(jsonStore);
+        if (currentMatch.delete()) {
+            System.out.println("Deleted the current match from memory.");
+        } else {
+            System.out.println("Could not delete the current match from memory.");
+        }
+    }
+
+    // EFFECTS: Prints the names of save files (.json files) stored in ./data to console. Returns true if there are
+    //          any saved games in memory, false otherwise.
+    private boolean listSaves() {
+        boolean hasSaveFiles = true;
         File saveFolder = new File(SAVE_DIRECTORY);
         File[] saves = saveFolder.listFiles();
-        System.out.print("Currently saved games are: ");
-        try {
-            assert saves != null;
+
+        assert saves != null;
+        if (saves.length == 1) {
+            System.out.println("There are no files saved in " + SAVE_DIRECTORY);
+            hasSaveFiles = false;
+        } else {
+            System.out.print("Currently saved games are: ");
             for (File save : saves) {
                 if (save.isFile()) {
                     int nameLength = save.getName().indexOf('.');
@@ -177,27 +253,8 @@ public class OthelloGame {
                 }
             }
             System.out.println();
-        } catch (NullPointerException e) {
-            System.out.println("There are no files saved in " + SAVE_DIRECTORY);
         }
-    }
-
-    // EFFECTS: Saves the game board to file
-    //          Code taken from JsonSerializationDemo at https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
-    private void saveGame() {
-        listSaves();
-        System.out.print("Please input the name for your save file: ");
-        String destination = sc.nextLine();
-        setSaveLocation(destination);
-        jsonWriter.setDestination(jsonStore);
-        try {
-            jsonWriter.open();
-            jsonWriter.write(game);
-            jsonWriter.close();
-            System.out.println("Saved the current game to " + jsonStore);
-        } catch (FileNotFoundException e) {
-            System.out.println("Unable to save to " + jsonStore);
-        }
+        return hasSaveFiles;
     }
 
     // MODIFIES: this
