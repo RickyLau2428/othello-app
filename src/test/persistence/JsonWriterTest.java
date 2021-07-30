@@ -23,6 +23,15 @@ public class JsonWriterTest extends BoardTest {
     }
 
     @Test
+    public void testSetDestination() {
+        JsonWriter writer = new JsonWriter("./data/test/testFile.json");
+        assertEquals("./data/test/testFile.json", writer.getDestination());
+
+        writer.setDestination("./data/test/newFile.json");
+        assertEquals("./data/test/newFile.json", writer.getDestination());
+    }
+
+    @Test
     public void testWriterInvalidFile() {
         try {
             JsonWriter writer = new JsonWriter("./data/test/IllegalFilename\0.json");

@@ -18,8 +18,12 @@ public class JsonWriter {
         this.destination = destination;
     }
 
-    // MODIFIES: this
-    // EFFECTS: Sets the destination file to destination
+    // getters:
+    public String getDestination() {
+        return destination;
+    }
+
+    // setters:
     public void setDestination(String destination) {
         this.destination = destination;
     }

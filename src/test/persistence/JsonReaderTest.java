@@ -19,6 +19,16 @@ public class JsonReaderTest extends BoardTest {
     public void setup() {
         testBoard = new GameBoard();
     }
+
+    @Test
+    public void testSetSource() {
+        JsonReader reader = new JsonReader("./data/test/testFile.json");
+        assertEquals("./data/test/testFile.json", reader.getSource());
+
+        reader.setSource("./data/test/newFile.json");
+        assertEquals("./data/test/newFile.json", reader.getSource());
+    }
+
     @Test
     public void testReaderNonExistentFile() {
         JsonReader reader = new JsonReader("./data/test/nonexistentfile.json");

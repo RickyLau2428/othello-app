@@ -22,8 +22,12 @@ public class JsonReader {
         this.source = source;
     }
 
-    // MODIFIES: this
-    // EFFECTS: Sets the source file to source
+    // getters:
+    public String getSource() {
+        return source;
+    }
+
+    // setters:
     public void setSource(String source) {
         this.source = source;
     }
