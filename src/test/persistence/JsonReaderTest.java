@@ -21,7 +21,7 @@ public class JsonReaderTest extends BoardTest {
     }
     @Test
     public void testReaderNonExistentFile() {
-        JsonReader reader = new JsonReader("./data/nonexistentfile.json");
+        JsonReader reader = new JsonReader("./data/test/nonexistentfile.json");
         try {
             testBoard = reader.read();
             fail("Exception not thrown.");
@@ -32,7 +32,7 @@ public class JsonReaderTest extends BoardTest {
 
     @Test
     public void testReaderEmptyBoard() {
-        JsonReader reader = new JsonReader("./data/testReaderEmptyBoard.json");
+        JsonReader reader = new JsonReader("./data/test/testReaderEmptyBoard.json");
         try {
             testBoard = reader.read();
         } catch (IOException e) {
@@ -48,7 +48,7 @@ public class JsonReaderTest extends BoardTest {
 
     @Test
     public void testReaderGeneralBoard() {
-        JsonReader reader = new JsonReader("./data/testReaderGeneralBoard.json");
+        JsonReader reader = new JsonReader("./data/test/testReaderGeneralBoard.json");
         try {
             testBoard = reader.read();
         } catch (IOException e) {

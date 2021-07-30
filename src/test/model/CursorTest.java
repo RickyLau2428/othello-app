@@ -50,7 +50,7 @@ public class CursorTest {
             testCursor.setPosition(100);
             fail("Exception was not thrown.");
         } catch (IllegalCursorException e) {
-
+            // pass
         }
     }
 
@@ -60,7 +60,7 @@ public class CursorTest {
             testCursor.setPosition(-3);
             fail("Exception was not thrown.");
         } catch (IllegalCursorException e) {
-
+            // pass
         }
     }
 
@@ -93,7 +93,7 @@ public class CursorTest {
             testCursor.moveCursorRight();
             fail("Exception not thrown.");
         } catch (IllegalCursorException e) {
-
+            // pass
         }
     }
 
@@ -104,7 +104,7 @@ public class CursorTest {
             testCursor.moveCursorRight();
             fail("Exception not thrown.");
         } catch (IllegalCursorException e) {
-
+            // pass
         }
     }
 
@@ -126,7 +126,7 @@ public class CursorTest {
             testCursor.moveCursorLeft();
             fail("Exception not thrown.");
         } catch (IllegalCursorException e) {
-
+            // pass
         }
     }
 
@@ -137,7 +137,7 @@ public class CursorTest {
             testCursor.moveCursorLeft();
             fail("Exception not thrown.");
         } catch (IllegalCursorException e) {
-
+            // pass
         }
     }
 
@@ -159,7 +159,7 @@ public class CursorTest {
             testCursor.moveCursorUp();
             fail("Exception not thrown.");
         } catch (IllegalCursorException e) {
-
+            // pass
         }
     }
 
@@ -181,7 +181,7 @@ public class CursorTest {
             testCursor.moveCursorDown();
             fail("Exception not thrown.");
         } catch (IllegalCursorException e) {
-
+            // pass
         }
     }
 
@@ -204,7 +204,7 @@ public class CursorTest {
             testCursor.moveCursorUpperRight();
             fail("Exception not thrown.");
         } catch (IllegalCursorException e) {
-
+            // pass
         }
     }
 
@@ -227,7 +227,7 @@ public class CursorTest {
             testCursor.moveCursorLowerRight();
             fail("Exception not thrown.");
         } catch (IllegalCursorException e) {
-
+            // pass
         }
     }
 
@@ -249,7 +249,7 @@ public class CursorTest {
             testCursor.moveCursorUpperLeft();
             fail("Exception not thrown.");
         } catch (IllegalCursorException e) {
-
+            // pass
         }
     }
 
@@ -272,7 +272,7 @@ public class CursorTest {
             testCursor.moveCursorLowerLeft();
             fail("Exception not thrown.");
         } catch (IllegalCursorException e) {
-
+            // pass
         }
     }
 }

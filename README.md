@@ -30,3 +30,4 @@ played the game before, but I felt that it translated into a program fairly well
 * As a user, I want to be able to see the final score of an Othello match.
 * As a user, I want to be able to save an ongoing match to file.
 * As a user, I want to be able to load an ongoing match from file.
+* As a user, I want to be able to save/load multiple games to/from file.

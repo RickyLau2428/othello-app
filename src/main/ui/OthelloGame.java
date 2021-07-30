@@ -6,6 +6,7 @@ import model.State;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
@@ -17,7 +18,10 @@ import static ui.DrawBoard.CLEAR_CIRCLE;
 
 // Represents a running match of Othello that interacts directly with the user(s)
 public class OthelloGame {
-    private static final String JSON_STORE = "./data/gameBoard.json";
+    private static final String SAVE_DIRECTORY = "./data";
+    private String saveLocation;
+    private String jsonStore = "./data/gameBoard.json";
+
     private GameBoard game;
     private Scanner sc;
     private DrawBoard drawBoard;
@@ -32,8 +36,17 @@ public class OthelloGame {
         sc = new Scanner(System.in);
         drawBoard = new DrawBoard(game.getBoard());
         isMenuOpen = false;
-        jsonReader = new JsonReader(JSON_STORE);
-        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(jsonStore);
+        jsonWriter = new JsonWriter(jsonStore);
+    }
+
+    public String getSaveLocation() {
+        return saveLocation;
+    }
+
+    public void setSaveLocation(String fileName) {
+        saveLocation = fileName;
+        jsonStore = "./data/" + saveLocation + ".json";
     }
 
     // MODIFIES: this
@@ -124,8 +137,8 @@ public class OthelloGame {
             case "quit":
                 System.exit(-1);
             default:
-                isMenuOpen = false;
                 printRetryMessage();
+                processMenuCommand();
         }
     }
 
@@ -133,25 +146,57 @@ public class OthelloGame {
     // EFFECTS: Sets the current board state to one loaded from JSON_STORE
     //          Code taken from JsonSerializationDemo at https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
     private void loadGame() {
+        listSaves();
+        System.out.print("Please choose a game to load: ");
+        String source = sc.nextLine();
+        setSaveLocation(source);
+        jsonReader.setSource(jsonStore);
         try {
             game = jsonReader.read();
             drawBoard = new DrawBoard(game.getBoard());
-            System.out.println("Loaded a saved board from " + JSON_STORE);
+            System.out.println("Loaded a saved board from " + jsonStore);
+            game.setValidMoves();
         } catch (IOException e) {
-            System.out.println("Unable to read from file: " + JSON_STORE);
+            System.out.println("Unable to read from file: " + jsonStore);
+            loadGame();
+        }
+    }
+
+    // EFFECTS: Prints the the names of save files (.json files) stored in ./data to console
+    private void listSaves() {
+        File saveFolder = new File(SAVE_DIRECTORY);
+        File[] saves = saveFolder.listFiles();
+        System.out.print("Currently saved games are: ");
+        try {
+            assert saves != null;
+            for (File save : saves) {
+                if (save.isFile()) {
+                    int nameLength = save.getName().indexOf('.');
+                    String fileName = save.getName().substring(0, nameLength);
+                    System.out.print(fileName + "; ");
+                }
+            }
+            System.out.println();
+        } catch (NullPointerException e) {
+            System.out.println("There are no files saved in " + SAVE_DIRECTORY);
         }
     }
 
     // EFFECTS: Saves the game board to file
     //          Code taken from JsonSerializationDemo at https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
     private void saveGame() {
+        listSaves();
+        System.out.print("Please input the name for your save file: ");
+        String destination = sc.nextLine();
+        setSaveLocation(destination);
+        jsonWriter.setDestination(jsonStore);
         try {
             jsonWriter.open();
             jsonWriter.write(game);
             jsonWriter.close();
-            System.out.println("Saved the current game to " + JSON_STORE);
+            System.out.println("Saved the current game to " + jsonStore);
         } catch (FileNotFoundException e) {
-            System.out.println("Unable to save to " + JSON_STORE);
+            System.out.println("Unable to save to " + jsonStore);
         }
     }
 

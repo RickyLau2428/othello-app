@@ -22,6 +22,12 @@ public class JsonReader {
         this.source = source;
     }
 
+    // MODIFIES: this
+    // EFFECTS: Sets the source file to source
+    public void setSource(String source) {
+        this.source = source;
+    }
+
     // EFFECTS: Reads a game board from file and returns it.
     //          Throws IOException if an error comes up while processing
     public GameBoard read() throws IOException {

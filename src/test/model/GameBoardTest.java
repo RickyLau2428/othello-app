@@ -74,7 +74,7 @@ public class GameBoardTest extends BoardTest {
             testBoard.sanitizeInput("test");
             fail("Exception not thrown.");
         } catch (IllegalPlayerInputException e) {
-
+            // pass
         }
     }
 
@@ -93,7 +93,7 @@ public class GameBoardTest extends BoardTest {
             assertEquals(-1, testBoard.translateInput("AJ"));
             fail("Exception not thrown.");
         } catch (IllegalPlayerInputException e) {
-
+            // pass
         }
     }
 
@@ -110,7 +110,7 @@ public class GameBoardTest extends BoardTest {
             testBoard.sanitizeInput("@5");
             fail("Exception not thrown.");
         } catch (IllegalPlayerInputException e) {
-
+            // pass
         }
     }
 
@@ -120,7 +120,7 @@ public class GameBoardTest extends BoardTest {
             testBoard.sanitizeInput("~6");
             fail("Exception not thrown.");
         } catch (IllegalPlayerInputException e) {
-
+            // pass
         }
     }
 
@@ -130,7 +130,7 @@ public class GameBoardTest extends BoardTest {
             testBoard.sanitizeInput("A0");
             fail("Exception not thrown.");
         } catch (IllegalPlayerInputException e) {
-
+            // pass
         }
     }
 
@@ -140,7 +140,7 @@ public class GameBoardTest extends BoardTest {
             testBoard.sanitizeInput("AJ");
             fail("Exception not thrown.");
         } catch (IllegalPlayerInputException e) {
-
+            // pass
         }
     }
 
@@ -559,6 +559,11 @@ public class GameBoardTest extends BoardTest {
         testBoard.checkGameOver();
         assertFalse(testBoard.isGameOver());
         assertEquals(0, testBoard.getGameOverCounter());
+    }
+
+    @Test
+    public void testLoadGame() {
+
     }
 
     @Test

@@ -25,7 +25,7 @@ public class JsonWriterTest extends BoardTest {
     @Test
     public void testWriterInvalidFile() {
         try {
-            JsonWriter writer = new JsonWriter("./data/IllegalFilename\0.json");
+            JsonWriter writer = new JsonWriter("./data/test/IllegalFilename\0.json");
             writer.open();
             fail("Exception not thrown.");
         } catch (FileNotFoundException e) {
@@ -38,12 +38,12 @@ public class JsonWriterTest extends BoardTest {
         countPieces(testBoard);
 
         try {
-            JsonWriter writer = new JsonWriter("./data/testWriterEmptyBoard.json");
+            JsonWriter writer = new JsonWriter("./data/test/testWriterEmptyBoard.json");
             writer.open();
             writer.write(testBoard);
             writer.close();
 
-            JsonReader reader = new JsonReader("./data/testWriterEmptyBoard.json");
+            JsonReader reader = new JsonReader("./data/test/testWriterEmptyBoard.json");
             testBoard = reader.read();
         } catch (IOException e) {
             fail("Exception not expected.");
@@ -67,12 +67,12 @@ public class JsonWriterTest extends BoardTest {
         testBoard.setTurn(CLEAR);
 
         try {
-            JsonWriter writer = new JsonWriter("./data/testWriterGeneralBoard.json");
+            JsonWriter writer = new JsonWriter("./data/test/testWriterGeneralBoard.json");
             writer.open();
             writer.write(testBoard);
             writer.close();
 
-            JsonReader reader = new JsonReader("./data/testWriterGeneralBoard.json");
+            JsonReader reader = new JsonReader("./data/test/testWriterGeneralBoard.json");
             testBoard = reader.read();
         } catch (IOException e) {
             fail("Exception not expected.");
