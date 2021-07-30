@@ -140,6 +140,7 @@ public class OthelloGame {
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: Extension of processMenuCommands - handles save/load/delete exclusively
     private void processMemoryCommands() {
         switch (rawInput) {
@@ -181,6 +182,7 @@ public class OthelloGame {
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: Saves the game board to file
     //          Code taken from JsonSerializationDemo at https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
     private void saveGame() {
@@ -199,6 +201,7 @@ public class OthelloGame {
         }
     }
 
+    // MODIFIES: this
     // EFFECTS: Deletes the save file with the name given on prompt
     private void deleteGame() {
         listSaves();
@@ -287,7 +290,7 @@ public class OthelloGame {
     // EFFECTS: Prompts the user to re-enter a valid command and stores it in this
     private void printRetryMessage() {
         System.out.print("Please enter a valid command: ");
-        rawInput = sc.nextLine();
+        rawInput = sc.nextLine().trim().toLowerCase();
     }
 
     // MODIFIES: this
