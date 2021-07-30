@@ -109,11 +109,11 @@ public class GameBoard implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: Sets the piece counter for the given state to num
+    // EFFECTS: Sets the piece counter for the given state to num. If state is EMPTY, does nothing.
     public void setPieceCount(State state, int num) {
         if (state.equals(FILL)) {
             fillPieceCount = num;
-        } else if (state.equals(CLEAR)) {
+        } else {
             clearPieceCount = num;
         }
     }
