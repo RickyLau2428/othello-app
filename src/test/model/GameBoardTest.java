@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import static model.GameBoard.*;
 import static model.State.*;
-import static model.State.EMPTY;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -581,7 +580,7 @@ public class GameBoardTest extends BoardTest {
 
         testBoard.checkGameOver();
         assertTrue(testBoard.isGameOver());
-        assertEquals(EMPTY, testBoard.declareVictor());
+        assertNull(testBoard.declareVictor());
     }
 
     @Test
@@ -636,12 +635,7 @@ public class GameBoardTest extends BoardTest {
         assertEquals(0, testJson.getInt("clearPieceCount"));
         assertEquals(0, testJson.getInt("fillPieceCount"));
         assertEquals(0, testJson.getInt("gameOverCount"));
-
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            JSONObject pieceToCheck = testArray.getJSONObject(i);
-            assertEquals(i, pieceToCheck.getInt("position"));
-            assertEquals(EMPTY, pieceToCheck.get("state"));
-        }
+        assertTrue(testArray.isEmpty());
     }
 
     @Test
@@ -658,15 +652,16 @@ public class GameBoardTest extends BoardTest {
         assertEquals(2, testJson.getInt("fillPieceCount"));
         assertEquals(0, testJson.getInt("gameOverCount"));
 
-        for (int i = 0; i < BOARD_SIZE; i++) {
+        assertEquals(4, testArray.length());
+        for (int i = 0; i < testArray.length(); i++) {
             pieceToCheck = testArray.getJSONObject(i);
-            assertEquals(i, pieceToCheck.getInt("position"));
-            if (i == 27 || i == 36) {
+            Object position = pieceToCheck.get("position");
+            if (position.equals(27) || position.equals(36)) {
                 assertEquals(CLEAR, pieceToCheck.get("state"));
-            } else if (i == 28 || i == 35) {
+            } else if (position.equals(28) || position.equals(35)) {
                 assertEquals(FILL, pieceToCheck.get("state"));
             } else {
-                assertEquals(EMPTY, pieceToCheck.get("state"));
+                fail("Expected pieces not in board.");
             }
         }
     }

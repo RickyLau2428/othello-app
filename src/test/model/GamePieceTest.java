@@ -27,8 +27,8 @@ class GamePieceTest {
         testPiece.setState(CLEAR);
         assertEquals(CLEAR, testPiece.getState());
 
-        testPiece.setState(EMPTY);
-        assertEquals(EMPTY, testPiece.getState());
+        testPiece.setState(FILL);
+        assertEquals(FILL, testPiece.getState());
     }
 
     @Test

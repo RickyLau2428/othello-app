@@ -24,9 +24,9 @@ public class GameBoard implements Writable {
     public static final int Q3 = (SIDE_LENGTH * (MARGIN + 1)) + MARGIN;
     public static final int Q4 = (SIDE_LENGTH * (MARGIN + 1)) + (MARGIN + 1);
 
-    private List<GamePiece> board;
+    private Map<Integer, GamePiece> board;
     private State turn;
-    private HashMap<Integer, List<GamePiece>> validMoves;
+    private Map<Integer, Set<GamePiece>> validMoves;
     private Cursor cursor;
     private boolean isGameOver;
     private int clearPieceCount;
@@ -35,10 +35,8 @@ public class GameBoard implements Writable {
 
     // EFFECTS: Constructs a new game board in the starting configuration (fill goes first)
     public GameBoard() {
-        board = new LinkedList<>();
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            board.add(new GamePiece(i, EMPTY));
-        }
+        // initialCapacity set to 86 as to avoid any rehashing
+        board = new HashMap<>(86);
         turn = FILL;
         validMoves = new HashMap<>();
         cursor = new Cursor(0);
@@ -58,7 +56,8 @@ public class GameBoard implements Writable {
         fillPieceCount = fillPieces;
         gameOverCounter = gameOverCount;
 
-        board = new LinkedList<>();
+        // initialCapacity set to 86 as to avoid any rehashing
+        board = new HashMap<>(86);
         validMoves = new HashMap<>();
         cursor = new Cursor(0);
         isGameOver = false;
@@ -67,11 +66,11 @@ public class GameBoard implements Writable {
     }
 
     // getters
-    public List<GamePiece> getBoard() {
+    public Map<Integer, GamePiece> getBoard() {
         return this.board;
     }
 
-    public HashMap<Integer, List<GamePiece>> getValidMoves() {
+    public Map<Integer, Set<GamePiece>> getValidMoves() {
         return this.validMoves;
     }
 
@@ -109,7 +108,7 @@ public class GameBoard implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: Sets the piece counter for the given state to num. If state is EMPTY, does nothing.
+    // EFFECTS: Sets the piece counter for the given state to num.
     public void setPieceCount(State state, int num) {
         if (state.equals(FILL)) {
             fillPieceCount = num;
@@ -121,18 +120,18 @@ public class GameBoard implements Writable {
     // MODIFIES: this
     // EFFECTS: Sets up the board in the starting configuration.
     public void setUpGame() {
-        board.get(Q1).setState(FILL);
-        board.get(Q2).setState(CLEAR);
-        board.get(Q3).setState(FILL);
-        board.get(Q4).setState(CLEAR);
+        board.put(Q1, new GamePiece(Q1, FILL));
+        board.put(Q2, new GamePiece(Q2, CLEAR));
+        board.put(Q3, new GamePiece(Q3, FILL));
+        board.put(Q4, new GamePiece(Q4, CLEAR));
         clearPieceCount = 2;
         fillPieceCount = 2;
     }
 
     // MODIFIES: this
-    // EFFECTS: Returns the winner of the match, or EMPTY if it is a tie.
+    // EFFECTS: Returns the winner of the match, or null if it is a tie.
     public State declareVictor() {
-        State victor = EMPTY;
+        State victor = null;
         if (clearPieceCount > fillPieceCount) {
             victor = CLEAR;
         } else if (fillPieceCount > clearPieceCount) {
@@ -210,7 +209,7 @@ public class GameBoard implements Writable {
     public boolean placePiece(int position) {
         boolean isPiecePlaced = false;
         if (validMoves.containsKey(position)) {
-            board.get(position).setState(turn);
+            board.put(position, new GamePiece(position, turn));
             for (GamePiece piece : validMoves.get(position)) {
                 piece.flip();
             }
@@ -236,7 +235,7 @@ public class GameBoard implements Writable {
         // Clears validMoves for every new board state
         validMoves = new HashMap<>();
 
-        for (GamePiece piece : board) {
+        for (GamePiece piece : board.values()) {
             if (piece.getState().equals(turn)) {
                 cursor.setPosition(piece.getPosition());
                 checkAllDirections(turn);
@@ -257,12 +256,12 @@ public class GameBoard implements Writable {
     //          if it attempts to move illegally.
     public void checkDirection(State turn, int direction) {
         try {
-            List<GamePiece> potentialFlips = new LinkedList<>();
+            Set<GamePiece> potentialFlips = new HashSet<>();
             moveCursorDirection(direction);
             GamePiece toCheck = board.get(cursor.getCurrent());
 
             // The entry being checked must be of the opposite state
-            while (!(toCheck.getState().equals(turn)) && !(toCheck.getState().equals(EMPTY))) {
+            while (toCheck != null && !(toCheck.getState().equals(turn))) {
                 potentialFlips.add(toCheck);
                 moveCursorDirection(direction);
                 toCheck = board.get(cursor.getCurrent());
@@ -270,13 +269,13 @@ public class GameBoard implements Writable {
 
             // The entry being checked must hold an empty piece, and there are opposing pieces that would be flipped
             // if a piece is placed at that entry
-            if (toCheck.getState().equals(EMPTY) && !(potentialFlips.isEmpty())) {
-                if (validMoves.containsKey(toCheck.getPosition())) {
+            if (toCheck == null && !(potentialFlips.isEmpty())) {
+                if (validMoves.containsKey(cursor.getCurrent())) {
                     // Adds the potential flips to the corresponding key if it already exists in validMoves
-                    validMoves.get(toCheck.getPosition()).addAll(potentialFlips);
+                    validMoves.get(cursor.getCurrent()).addAll(potentialFlips);
                 } else {
                     // Adds a key-value pair to validMoves if the key does not already exist
-                    validMoves.put(toCheck.getPosition(), potentialFlips);
+                    validMoves.put(cursor.getCurrent(), potentialFlips);
                 }
             }
             // Resets the cursor for the next iteration of checkDirections
@@ -344,7 +343,7 @@ public class GameBoard implements Writable {
     private JSONArray piecesToJson() {
         JSONArray jsonArray = new JSONArray();
 
-        for (GamePiece piece : board) {
+        for (GamePiece piece : board.values()) {
             jsonArray.put(piece.toJson());
         }
 

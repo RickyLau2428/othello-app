@@ -18,7 +18,7 @@ import static ui.DrawBoard.CLEAR_CIRCLE;
 
 // Represents a running match of Othello that interacts directly with the user(s)
 public class OthelloGame {
-    private static final String SAVE_DIRECTORY = "./data";
+    private static final String SAVE_DIRECTORY = "./data/test";
     private String jsonCursor;
     private String jsonStore = "./data/startBoard.json";
 

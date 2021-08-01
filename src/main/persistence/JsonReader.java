@@ -78,6 +78,6 @@ public class JsonReader {
         int position = jsonObject.getInt("position");
         State state = State.valueOf(jsonObject.getString("state"));
         GamePiece piece = new GamePiece(position, state);
-        gb.getBoard().add(piece);
+        gb.getBoard().put(position, piece);
     }
 }

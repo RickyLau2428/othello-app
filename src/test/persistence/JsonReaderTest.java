@@ -65,10 +65,10 @@ public class JsonReaderTest extends BoardTest {
             fail("Exception not expected.");
         }
 
-        assertEquals(27, getActivePiecesNum(testBoard));
+        assertEquals(9, getActivePiecesNum(testBoard));
         assertEquals(CLEAR, testBoard.getTurn());
-        assertEquals(16, testBoard.getClearPieceCount());
-        assertEquals(11, testBoard.getFillPieceCount());
+        assertEquals(4, testBoard.getClearPieceCount());
+        assertEquals(5, testBoard.getFillPieceCount());
         assertEquals(0, testBoard.getGameOverCounter());
     }
 }

@@ -211,50 +211,6 @@
         {
             "position": 52,
             "state": "CLEAR"
-        },
-        {
-            "position": 53,
-            "state": "EMPTY"
-        },
-        {
-            "position": 54,
-            "state": "EMPTY"
-        },
-        {
-            "position": 55,
-            "state": "EMPTY"
-        },
-        {
-            "position": 56,
-            "state": "EMPTY"
-        },
-        {
-            "position": 57,
-            "state": "EMPTY"
-        },
-        {
-            "position": 58,
-            "state": "EMPTY"
-        },
-        {
-            "position": 59,
-            "state": "EMPTY"
-        },
-        {
-            "position": 60,
-            "state": "EMPTY"
-        },
-        {
-            "position": 61,
-            "state": "EMPTY"
-        },
-        {
-            "position": 62,
-            "state": "EMPTY"
-        },
-        {
-            "position": 63,
-            "state": "EMPTY"
         }
     ],
     "gameOverCount": 0,

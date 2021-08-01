@@ -7,7 +7,7 @@ public class BoardTest {
     // MODIFIES: gb
     // EFFECTS: Places pieces on the test board regardless of game rules
     public void setPiece(GameBoard gb, int position, State state) {
-        gb.getBoard().get(position).setState(state);
+        gb.getBoard().put(position, new GamePiece(position, state));
     }
 
     // MODIFIES: gb
@@ -17,13 +17,11 @@ public class BoardTest {
     }
 
     // MODIFIES: gb
-    // EFFECTS: Returns the number of active pieces on the board (state != EMPTY)
+    // EFFECTS: Returns the number of active pieces on the board
     public int getActivePiecesNum(GameBoard gb) {
         int counter = 0;
-        for (GamePiece g : gb.getBoard()) {
-            if (!(g.getState().equals(EMPTY))) {
-                counter++;
-            }
+        for (int i = 0; i < gb.getBoard().values().size(); i++) {
+            counter++;
         }
         return counter;
     }
@@ -31,11 +29,7 @@ public class BoardTest {
     // MODIFIES: gb
     // EFFECTS: Removes all active pieces from play
     public void clearBoard(GameBoard gb) {
-        for (GamePiece g : gb.getBoard()) {
-            if (!(g.getState().equals(EMPTY))) {
-                g.setState(EMPTY);
-            }
-        }
+        gb.getBoard().clear();
     }
 
     // MODIFIES: gb
@@ -44,10 +38,10 @@ public class BoardTest {
     public void countPieces(GameBoard gb) {
         int clearPieceCounter = 0;
         int fillPieceCounter = 0;
-        for (int i = 0; i <= 63; i++) {
-            if (getPieceState(gb, i).equals(CLEAR)) {
+        for (GamePiece gp : gb.getBoard().values()) {
+            if (gp.getState().equals(CLEAR)) {
                 clearPieceCounter++;
-            } else if (getPieceState(gb, i).equals(FILL)) {
+            } else {
                 fillPieceCounter++;
             }
         }

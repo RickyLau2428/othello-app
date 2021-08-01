@@ -31,8 +31,7 @@ public class GamePiece implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: Changes the piece's state from FILL to CLEAR or vice versa. Does nothing
-    //          if state is EMPTY.
+    // EFFECTS: Changes the piece's state from FILL to CLEAR or vice versa.
     public void flip() {
         if (state.equals(FILL)) {
             state = CLEAR;

@@ -4,8 +4,10 @@ import model.GameBoard;
 import model.GamePiece;
 
 import java.util.List;
+import java.util.Map;
 
 import static model.GameBoard.SIDE_LENGTH;
+import static model.State.CLEAR;
 
 // Represents a rendering of a current board state on a console
 public class DrawBoard {
@@ -14,10 +16,10 @@ public class DrawBoard {
     public static final String LINE = "+---";
     public static final String SIDE_LINE = "|";
 
-    private final List<GamePiece> board;
+    private final Map<Integer, GamePiece> board;
 
     // EFFECTS: Constructs a drawer with access to the game board
-    public DrawBoard(List<GamePiece> board) {
+    public DrawBoard(Map<Integer, GamePiece> board) {
         this.board = board;
     }
 
@@ -36,16 +38,18 @@ public class DrawBoard {
     }
 
     // EFFECTS: Returns the appropriate character to console based on contents of board at
-    //          positions: " " for EMPTY, FILL_CIRCLE for FILL, CLEAR_CIRCLE for CLEAR
+    //          positions: " " for null contents, FILL_CIRCLE for FILL, CLEAR_CIRCLE for CLEAR
     private String retrievePiece(int position) {
-        switch (board.get(position).getState()) {
-            case CLEAR:
-                return CLEAR_CIRCLE;
-            case FILL:
-                return FILLED_CIRCLE;
-            default:
-                return " ";
+        String result;
+        GamePiece checkPiece = board.get(position);
+        if (checkPiece == null) {
+            result = " ";
+        } else if (checkPiece.getState().equals(CLEAR)) {
+            result = CLEAR_CIRCLE;
+        } else {
+            result = FILLED_CIRCLE;
         }
+        return result;
     }
 
     // EFFECTS: Prints number denominations along the side of the board

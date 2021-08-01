@@ -1,108 +1,16 @@
 {
     "pieces": [
         {
-            "position": 0,
-            "state": "CLEAR"
-        },
-        {
-            "position": 1,
-            "state": "EMPTY"
-        },
-        {
-            "position": 2,
-            "state": "EMPTY"
-        },
-        {
-            "position": 3,
-            "state": "EMPTY"
-        },
-        {
-            "position": 4,
-            "state": "EMPTY"
-        },
-        {
-            "position": 5,
-            "state": "EMPTY"
-        },
-        {
-            "position": 6,
-            "state": "EMPTY"
-        },
-        {
-            "position": 7,
-            "state": "EMPTY"
-        },
-        {
-            "position": 8,
-            "state": "EMPTY"
-        },
-        {
-            "position": 9,
-            "state": "CLEAR"
-        },
-        {
-            "position": 10,
-            "state": "EMPTY"
-        },
-        {
-            "position": 11,
-            "state": "EMPTY"
-        },
-        {
-            "position": 12,
-            "state": "EMPTY"
-        },
-        {
-            "position": 13,
-            "state": "EMPTY"
-        },
-        {
-            "position": 14,
-            "state": "EMPTY"
-        },
-        {
-            "position": 15,
-            "state": "EMPTY"
-        },
-        {
-            "position": 16,
-            "state": "EMPTY"
-        },
-        {
-            "position": 17,
-            "state": "FILL"
-        },
-        {
             "position": 18,
             "state": "CLEAR"
         },
         {
             "position": 19,
-            "state": "EMPTY"
-        },
-        {
-            "position": 20,
-            "state": "CLEAR"
-        },
-        {
-            "position": 21,
-            "state": "EMPTY"
-        },
-        {
-            "position": 22,
-            "state": "CLEAR"
-        },
-        {
-            "position": 23,
-            "state": "EMPTY"
-        },
-        {
-            "position": 24,
-            "state": "EMPTY"
+            "state": "FILL"
         },
         {
             "position": 25,
-            "state": "CLEAR"
+            "state": "FILL"
         },
         {
             "position": 26,
@@ -117,148 +25,20 @@
             "state": "FILL"
         },
         {
-            "position": 29,
-            "state": "FILL"
-        },
-        {
-            "position": 30,
-            "state": "FILL"
-        },
-        {
-            "position": 31,
-            "state": "FILL"
-        },
-        {
-            "position": 32,
-            "state": "CLEAR"
-        },
-        {
-            "position": 33,
-            "state": "CLEAR"
-        },
-        {
             "position": 34,
             "state": "CLEAR"
         },
         {
             "position": 35,
-            "state": "FILL"
+            "state": "CLEAR"
         },
         {
             "position": 36,
             "state": "CLEAR"
-        },
-        {
-            "position": 37,
-            "state": "EMPTY"
-        },
-        {
-            "position": 38,
-            "state": "CLEAR"
-        },
-        {
-            "position": 39,
-            "state": "EMPTY"
-        },
-        {
-            "position": 40,
-            "state": "EMPTY"
-        },
-        {
-            "position": 41,
-            "state": "EMPTY"
-        },
-        {
-            "position": 42,
-            "state": "CLEAR"
-        },
-        {
-            "position": 43,
-            "state": "FILL"
-        },
-        {
-            "position": 44,
-            "state": "EMPTY"
-        },
-        {
-            "position": 45,
-            "state": "EMPTY"
-        },
-        {
-            "position": 46,
-            "state": "EMPTY"
-        },
-        {
-            "position": 47,
-            "state": "EMPTY"
-        },
-        {
-            "position": 48,
-            "state": "EMPTY"
-        },
-        {
-            "position": 49,
-            "state": "CLEAR"
-        },
-        {
-            "position": 50,
-            "state": "CLEAR"
-        },
-        {
-            "position": 51,
-            "state": "FILL"
-        },
-        {
-            "position": 52,
-            "state": "CLEAR"
-        },
-        {
-            "position": 53,
-            "state": "EMPTY"
-        },
-        {
-            "position": 54,
-            "state": "EMPTY"
-        },
-        {
-            "position": 55,
-            "state": "EMPTY"
-        },
-        {
-            "position": 56,
-            "state": "CLEAR"
-        },
-        {
-            "position": 57,
-            "state": "EMPTY"
-        },
-        {
-            "position": 58,
-            "state": "EMPTY"
-        },
-        {
-            "position": 59,
-            "state": "FILL"
-        },
-        {
-            "position": 60,
-            "state": "EMPTY"
-        },
-        {
-            "position": 61,
-            "state": "EMPTY"
-        },
-        {
-            "position": 62,
-            "state": "EMPTY"
-        },
-        {
-            "position": 63,
-            "state": "EMPTY"
         }
     ],
     "gameOverCount": 0,
-    "clearPieceCount": 16,
+    "clearPieceCount": 4,
     "turn": "CLEAR",
-    "fillPieceCount": 11
+    "fillPieceCount": 5
 }
