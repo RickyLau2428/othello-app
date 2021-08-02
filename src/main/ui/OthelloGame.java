@@ -18,7 +18,7 @@ import static ui.DrawBoard.CLEAR_CIRCLE;
 
 // Represents a running match of Othello that interacts directly with the user(s)
 public class OthelloGame {
-    private static final String SAVE_DIRECTORY = "./data/test";
+    private static final String SAVE_DIRECTORY = "./data";
     private String jsonCursor;
     private String jsonStore = "./data/startBoard.json";
 
@@ -30,7 +30,7 @@ public class OthelloGame {
     private JsonReader jsonReader;
     private JsonWriter jsonWriter;
 
-    // EFFECTS: Creates a game board
+    // EFFECTS: Creates a game board and readers/writers
     public OthelloGame() {
         game = new GameBoard();
         sc = new Scanner(System.in);
@@ -43,7 +43,7 @@ public class OthelloGame {
     // MODIFIES: this
     // EFFECTS: Sets the file path to a file (potentially non-existent) in ./data
     public void setFileCursor(String fileName) {
-        jsonCursor = "./data/" + fileName + ".json";
+        jsonCursor = SAVE_DIRECTORY + "/" + fileName + ".json";
     }
 
     // MODIFIES: this
