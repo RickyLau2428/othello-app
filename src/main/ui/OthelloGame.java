@@ -18,9 +18,9 @@ import static ui.DrawBoard.CLEAR_CIRCLE;
 
 // Represents a running match of Othello that interacts directly with the user(s)
 public class OthelloGame {
-    private static final String SAVE_DIRECTORY = "./data";
+    private static final String SAVE_DIRECTORY = "./data/saves";
     private String jsonCursor;
-    private String jsonStore = "./data/startBoard.json";
+    private String jsonStore = "./data/saves/startBoard.json";
 
     private GameBoard game;
     private Scanner sc;
@@ -38,6 +38,11 @@ public class OthelloGame {
         isMenuOpen = false;
         jsonReader = new JsonReader(jsonCursor);
         jsonWriter = new JsonWriter(jsonCursor);
+    }
+
+    // getters:
+    public GameBoard getGame() {
+        return game;
     }
 
     // MODIFIES: this
@@ -243,7 +248,7 @@ public class OthelloGame {
         File[] saves = saveFolder.listFiles();
 
         assert saves != null;
-        if (saves.length == 1) {
+        if (saves.length == 0) {
             System.out.println("There are no files saved in " + SAVE_DIRECTORY);
             hasSaveFiles = false;
         } else {

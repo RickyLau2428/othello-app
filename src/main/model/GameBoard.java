@@ -32,6 +32,7 @@ public class GameBoard implements Writable {
     private int clearPieceCount;
     private int fillPieceCount;
     private int gameOverCounter;
+    private Set<GamePiece> playedPieces;
 
     // EFFECTS: Constructs a new game board in the starting configuration (fill goes first)
     public GameBoard() {
@@ -44,6 +45,7 @@ public class GameBoard implements Writable {
         clearPieceCount = 0;
         fillPieceCount = 0;
         gameOverCounter = 0;
+        playedPieces = new HashSet<>();
 
         setUpGame();
         setValidMoves();
@@ -92,6 +94,10 @@ public class GameBoard implements Writable {
 
     public int getGameOverCounter() {
         return gameOverCounter;
+    }
+
+    public Set<GamePiece> getPlayedPieces() {
+        return playedPieces;
     }
 
 
@@ -209,7 +215,8 @@ public class GameBoard implements Writable {
     public boolean placePiece(int position) {
         boolean isPiecePlaced = false;
         if (validMoves.containsKey(position)) {
-            board.put(position, new GamePiece(position, turn));
+            GamePiece toPlace = new GamePiece(position, turn);
+            board.put(position, toPlace);
             for (GamePiece piece : validMoves.get(position)) {
                 piece.flip();
             }
@@ -222,6 +229,8 @@ public class GameBoard implements Writable {
                 clearPieceCount += (validMoves.get(position).size() + 1);
             }
 
+            playedPieces = validMoves.get(position);
+            playedPieces.add(toPlace);
             nextTurn();
             isPiecePlaced = true;
         }
