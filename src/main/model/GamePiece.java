@@ -40,8 +40,8 @@ public class GamePiece implements Writable {
         }
     }
 
-    @Override
     // EFFECTS: Returns this as a JSON object
+    @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("position", position);

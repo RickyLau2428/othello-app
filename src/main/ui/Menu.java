@@ -25,7 +25,6 @@ public class Menu implements ActionListener {
         initializeMenuItem(saveBoard, "save");
         initializeMenuItem(loadBoard, "load");
         fileChooser = new JFileChooser();
-
         menu.add(saveBoard);
         menu.add(loadBoard);
         menuBar.add(menu);

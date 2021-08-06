@@ -44,6 +44,9 @@ public class BoardRender extends JPanel {
         this.game = game;
     }
 
+    // MODIFIES: this and g
+    // EFFECTS: Updates the GUI board with the current game state and draws it on g. Switches to the game over screen
+    //          if the game is over.
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -99,7 +102,7 @@ public class BoardRender extends JPanel {
     private void gameOver(Graphics g) {
         Color saved = g.getColor();
 
-        g.setColor(Color.LIGHT_GRAY);
+        g.setColor(Color.WHITE);
         g.fillRect(0, 0, boardLength, boardLength);
 
         g.setColor(new Color(0, 0, 0));

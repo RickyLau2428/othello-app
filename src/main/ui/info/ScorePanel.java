@@ -33,6 +33,8 @@ public class ScorePanel extends Information {
         clearScore = new JLabel(FILL_SCORE_STARTER + 2);
         fillScore.setFont(new Font("Arial", Font.PLAIN, 18));
         clearScore.setFont(new Font("Arial", Font.PLAIN, 18));
+        container.setOpaque(true);
+        container.setBackground(Color.WHITE);
         container.add(fillScore);
         container.add(clearScore);
     }

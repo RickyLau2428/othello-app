@@ -39,11 +39,15 @@ public class TurnPanel extends Information {
         } else if (state.equals(FILL)) {
             currTurn = new JLabel("Fill");
         }
-        currTurn.setFont(new Font("Arial", Font.BOLD, 20));
+        currTurn.setFont(new Font("Arial", Font.PLAIN, 20));
         currTurn.setBounds(2, 0, SECTION_WIDTH, SECTION_HEIGHT / 2);
+        currTurn.setOpaque(true);
+        currTurn.setBackground(Color.WHITE);
         container.add(currTurn);
     }
 
+    // MODIFIES: this
+    // EFFECTS: Initializes the container for the title and turn labels
     @Override
     protected void initializeContainer() {
         super.initializeContainer();

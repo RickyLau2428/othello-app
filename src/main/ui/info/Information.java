@@ -17,7 +17,6 @@ public abstract class Information extends JPanel {
     public Information(GameBoard game, String titleText) {
         this.game = game;
         setPreferredSize(new Dimension(InfoPanel.SECTION_WIDTH, InfoPanel.SECTION_HEIGHT));
-        setBackground(Color.WHITE);
         initializeTitle(titleText);
         initializeContainer();
         setLayout(null);
@@ -38,6 +37,9 @@ public abstract class Information extends JPanel {
         title.setFont(new Font("SansSerif", Font.BOLD, 25));
         title.setBounds(0, 0, SECTION_WIDTH, SECTION_HEIGHT / 2);
         title.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        title.setOpaque(true);
+        title.setBackground(new Color(0, 106, 167));
+        title.setForeground(Color.WHITE);
     }
 
     // MODIFIES: this
