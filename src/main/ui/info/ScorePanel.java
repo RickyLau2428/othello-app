@@ -1,12 +1,9 @@
 package ui.info;
 
-import model.State;
-import ui.OthelloGame;
+import model.GameBoard;
 
 import javax.swing.*;
 import java.awt.*;
-
-import static model.State.*;
 
 // Container for information on current score in GUI
 public class ScorePanel extends Information {
@@ -17,19 +14,16 @@ public class ScorePanel extends Information {
     private JLabel clearScore;
 
     // EFFECTS: Initializes a score panel that has a title and scores
-    public ScorePanel(OthelloGame game) {
+    public ScorePanel(GameBoard game) {
         super(game, "Current score: ");
         initializeScores();
     }
 
     // MODIFIES: this
     // EFFECTS: Updates the text rendering of state's score to be count
-    public void setTextScore(State state, int count) {
-        if (state.equals(CLEAR)) {
-            fillScore.setText(CLEAR_SCORE_STARTER + count);
-        } else if (state.equals(FILL)) {
-            clearScore.setText(FILL_SCORE_STARTER + count);
-        }
+    public void setTextScore(int fillPieceScore, int clearPieceScore) {
+        fillScore.setText(FILL_SCORE_STARTER + fillPieceScore);
+        clearScore.setText(CLEAR_SCORE_STARTER + clearPieceScore);
     }
 
     // MODIFIES: this
@@ -37,6 +31,8 @@ public class ScorePanel extends Information {
     private void initializeScores() {
         fillScore = new JLabel(CLEAR_SCORE_STARTER + 2);
         clearScore = new JLabel(FILL_SCORE_STARTER + 2);
+        fillScore.setFont(new Font("Arial", Font.PLAIN, 18));
+        clearScore.setFont(new Font("Arial", Font.PLAIN, 18));
         container.add(fillScore);
         container.add(clearScore);
     }

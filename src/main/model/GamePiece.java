@@ -16,7 +16,7 @@ public class GamePiece implements Writable {
         this.state = state;
     }
 
-    // getters
+    // getters:
     public int getPosition() {
         return this.position;
     }
@@ -25,7 +25,7 @@ public class GamePiece implements Writable {
         return this.state;
     }
 
-    // setters
+    // setters:
     public void setState(State state) {
         this.state = state;
     }

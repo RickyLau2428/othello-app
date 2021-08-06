@@ -3,7 +3,6 @@ package model;
 import org.json.JSONArray;
 import persistence.Writable;
 import exceptions.IllegalCursorException;
-import exceptions.IllegalPlayerInputException;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -76,6 +75,10 @@ public class GameBoard implements Writable {
         return this.validMoves;
     }
 
+    public Set<Integer> getValidMoveKeys() {
+        return this.validMoves.keySet();
+    }
+
     public State getTurn() {
         return this.turn;
     }
@@ -96,11 +99,6 @@ public class GameBoard implements Writable {
         return gameOverCounter;
     }
 
-    public Set<GamePiece> getPlayedPieces() {
-        return playedPieces;
-    }
-
-
     // setters
     public void setGameOverCounter(int num) {
         this.gameOverCounter = num;
@@ -111,6 +109,19 @@ public class GameBoard implements Writable {
     public void setTurn(State state) {
         this.turn = state;
         setValidMoves();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Updates the state of the board and checks if the game is over.
+    public void update() {
+        if (!checkAnyValidMoves()) {
+            checkGameOver();
+            if (gameOverCounter == 1) {
+                update();
+            }
+        } else {
+            setGameOverCounter(0);
+        }
     }
 
     // MODIFIES: this
@@ -152,36 +163,6 @@ public class GameBoard implements Writable {
         if (gameOverCounter == 2) {
             isGameOver = true;
         }
-    }
-
-    // EFFECTS: Translates a player input command to the appropriate position
-    //          on the board and returns the result. Throws IllegalPlayerInputException if
-    //          the input is invalid.
-    public int translateInput(String input) throws IllegalPlayerInputException {
-        String toTranslate = sanitizeInput(input);
-        int letter = toTranslate.charAt(0) - 'A';
-        int num = 8 * (toTranslate.charAt(1) - '1');
-        return letter + num;
-    }
-
-    // EFFECTS: Checks strings for appropriate conditions and processes it for later translation.
-    //          Throws an IllegalPlayerInputException if input is invalid.
-    public String sanitizeInput(String input) throws IllegalPlayerInputException {
-        String processed = input.toUpperCase();
-        if (processed.length() != 2
-                || (processed.charAt(0) < 'A' || processed.charAt(0) > 'H')
-                || (processed.charAt(1) < '1' || processed.charAt(1) > '8')) {
-            throw new IllegalPlayerInputException();
-        }
-        return processed;
-    }
-
-    // EFFECTS: Translates an index position on the board to a player input command.
-    public String indexToCommand(int position) {
-        char letter = (char) ((position % 8) + 'A');
-        char num = (char) ((position / 8) + '1');
-
-        return String.valueOf(letter) + num;
     }
 
     // MODIFIES: this

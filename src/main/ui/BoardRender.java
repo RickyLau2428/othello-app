@@ -11,31 +11,37 @@ import java.util.Map;
 
 import static model.State.*;
 
+// Represents a board shown on the GUI
 public class BoardRender extends JPanel {
     public static final Image CLEAR_CIRCLE = new ImageIcon("./res/images/gamepiece/clearCircle.png").getImage();
     public static final Image FILL_CIRCLE = new ImageIcon("./res/images/gamepiece/fillCircle.png").getImage();
     public static final Image BLANK_SQUARE = new ImageIcon("./res/images/blankSquare.png").getImage();
     public static final Image HELP_ICON = new ImageIcon("./res/images/helpIcon.png").getImage();
     public static final String OVER = "The winner is: ";
-    public static final String RESET = "Press [SPACE] to start another game.";
 
     public final int boardLength = GameBoard.SIDE_LENGTH * BLANK_SQUARE.getWidth(this);
 
-    private OthelloGame game;
+    private GameBoard game;
     private List<GameSquare> board;
 
-    public BoardRender(OthelloGame game) {
+    // EFFECTS: Initializes a board to render with the appropriate size and colour
+    public BoardRender(GameBoard game) {
         super();
+        this.game = game;
         setPreferredSize(sizeWindow());
         setMinimumSize(sizeWindow());
         setBackground(Color.WHITE);
         board = new ArrayList<>(GameBoard.SIDE_LENGTH * GameBoard.SIDE_LENGTH);
-        this.game = game;
     }
 
     // getters:
     public List<GameSquare> getBoard() {
         return board;
+    }
+
+    // setters:
+    public void setGame(GameBoard game) {
+        this.game = game;
     }
 
     @Override
@@ -46,8 +52,7 @@ public class BoardRender extends JPanel {
 
         drawBoard(g);
 
-        // TODO: Fix game end
-        if (game.getGame().isGameOver()) {
+        if (game.isGameOver()) {
             gameOver(g);
         }
         g.dispose();
@@ -65,10 +70,17 @@ public class BoardRender extends JPanel {
     // EFFECTS: Updates the board to draw with the game's current state
     private void updateBoard() {
         if (board.isEmpty()) {
-            populateBoard();
-            setupBoard(game.getGame().getBoard());
+            populateGameSquares();
         }
-        updatePieces();
+        setUpBoardImage(game.getBoard());
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Completely wipes the board of all current images (used only in loading a board from file)
+    public void reset() {
+        for (int i = 0; i < GameBoard.BOARD_SIZE; i++) {
+            board.get(i).setPieceImage(BLANK_SQUARE);
+        }
     }
 
     // MODIFIES: this
@@ -86,11 +98,14 @@ public class BoardRender extends JPanel {
     // Taken from SpaceInvadersRefactored at https://github.students.cs.ubc.ca/CPSC210/SpaceInvadersRefactored.git
     private void gameOver(Graphics g) {
         Color saved = g.getColor();
+
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(0, 0, boardLength, boardLength);
+
         g.setColor(new Color(0, 0, 0));
-        g.setFont(new Font("Arial", Font.PLAIN, 20));
+        g.setFont(new Font("Arial", Font.BOLD, 35));
         FontMetrics fm = g.getFontMetrics();
-        centreString(OVER + game.getGame().declareVictor(), g, fm, boardLength / 2);
-        centreString(RESET, g, fm, boardLength / 2 + 50);
+        centreString(OVER + game.declareVictor(), g, fm, boardLength / 2);
         g.setColor(saved);
     }
 
@@ -99,12 +114,12 @@ public class BoardRender extends JPanel {
     // Taken from SpaceInvadersRefactored at https://github.students.cs.ubc.ca/CPSC210/SpaceInvadersRefactored.git
     private void centreString(String str, Graphics g, FontMetrics fm, int positionY) {
         int width = fm.stringWidth(str);
-        g.drawString(str, boardLength - width / 2, positionY);
+        g.drawString(str, (boardLength - width) / 2, positionY);
     }
 
     // MODIFIES: this
     // EFFECTS: Fully populates the board with blank squares
-    private void populateBoard() {
+    public void populateGameSquares() {
         int width = getWidth();
         int height = getHeight();
 
@@ -120,7 +135,7 @@ public class BoardRender extends JPanel {
 
     // MODIFIES: this
     // EFFECTS: Edits the viewing board with the appropriate images depending on position
-    private void setupBoard(Map<Integer, GamePiece> currBoard) {
+    public void setUpBoardImage(Map<Integer, GamePiece> currBoard) {
         for (int i = 0; i < GameBoard.BOARD_SIZE; i++) {
             if (currBoard.containsKey(i)) {
                 if (currBoard.get(i).getState().equals(CLEAR)) {
@@ -128,22 +143,6 @@ public class BoardRender extends JPanel {
                 } else {
                     board.get(i).setPieceImage(FILL_CIRCLE);
                 }
-            }
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: Updates the board with all recently flipped/played pieces
-    private void updatePieces() {
-        if (game.getGame().getTurn().equals(CLEAR)) {
-            for (GamePiece gp : game.getGame().getPlayedPieces()) {
-                Image currentFrame = new ImageIcon(("./res/images/gamepiece/fillCircle.png")).getImage();
-                board.get(gp.getPosition()).setPieceImage(currentFrame);
-            }
-        } else {
-            for (GamePiece gp : game.getGame().getPlayedPieces()) {
-                Image currentFrame = new ImageIcon(("./res/images/gamepiece/clearCircle.png")).getImage();
-                board.get(gp.getPosition()).setPieceImage(currentFrame);
             }
         }
     }

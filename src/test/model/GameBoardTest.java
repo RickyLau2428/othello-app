@@ -1,10 +1,11 @@
 package model;
 
-import exceptions.IllegalPlayerInputException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Set;
 
 import static model.GameBoard.*;
 import static model.State.*;
@@ -50,97 +51,15 @@ public class GameBoardTest extends BoardTest {
     }
 
     @Test
-    public void testPrepareInputChangeNothingThrown() {
-        try {
-            assertEquals("A5", testBoard.sanitizeInput("a5"));
-        } catch (IllegalPlayerInputException e) {
-            fail("Exception not expected.");
-        }
-    }
+    public void testGetValidMoveKeys() {
+        setPiece(testBoard, 0, FILL);
+        setPiece(testBoard, 1, CLEAR);
+        testBoard.setValidMoves();
 
-    @Test
-    public void testPrepareInputNoChangeNothingThrown() {
-        try {
-            assertEquals("B8", testBoard.sanitizeInput("B8"));
-        } catch (IllegalPlayerInputException e) {
-            fail("Exception not expected.");
-        }
-    }
+        Set<Integer> testSet = testBoard.getValidMoveKeys();
 
-    @Test
-    public void testPrepareInputLengthException() {
-        try {
-            testBoard.sanitizeInput("test");
-            fail("Exception not thrown.");
-        } catch (IllegalPlayerInputException e) {
-            // pass
-        }
-    }
-
-    @Test
-    public void testTranslateInputNoExceptions() {
-        try {
-            assertEquals(52, testBoard.translateInput("E7"));
-        } catch (IllegalPlayerInputException e) {
-            fail("Exception not expected.");
-        }
-    }
-
-    @Test
-    public void testTranslateInputExceptionThrown() {
-        try {
-            assertEquals(-1, testBoard.translateInput("AJ"));
-            fail("Exception not thrown.");
-        } catch (IllegalPlayerInputException e) {
-            // pass
-        }
-    }
-
-    @Test
-    public void testIndexToCommand() {
-        assertEquals("A1", testBoard.indexToCommand(0));
-        assertEquals("H8", testBoard.indexToCommand(63));
-        assertEquals("D5", testBoard.indexToCommand(35));
-    }
-
-    @Test
-    public void testPrepareInputFirstCharLesserException() {
-        try {
-            testBoard.sanitizeInput("@5");
-            fail("Exception not thrown.");
-        } catch (IllegalPlayerInputException e) {
-            // pass
-        }
-    }
-
-    @Test
-    public void testPrepareInputFirstCharGreaterException() {
-        try {
-            testBoard.sanitizeInput("~6");
-            fail("Exception not thrown.");
-        } catch (IllegalPlayerInputException e) {
-            // pass
-        }
-    }
-
-    @Test
-    public void testPrepareInputSecondCharLesserException() {
-        try {
-            testBoard.sanitizeInput("A0");
-            fail("Exception not thrown.");
-        } catch (IllegalPlayerInputException e) {
-            // pass
-        }
-    }
-
-    @Test
-    public void testPrepareInputSecondCharGreaterException() {
-        try {
-            testBoard.sanitizeInput("AJ");
-            fail("Exception not thrown.");
-        } catch (IllegalPlayerInputException e) {
-            // pass
-        }
+        assertEquals(1, testSet.size());
+        assertTrue(testSet.contains(2));
     }
 
     @Test
@@ -552,17 +471,38 @@ public class GameBoardTest extends BoardTest {
         }
         // Simulates turn passing
         testBoard.setTurn(FILL);
-        assertFalse(testBoard.checkAnyValidMoves());
-        assertTrue(testBoard.checkAnyValidMoves());
-        testBoard.setGameOverCounter(0);
-        testBoard.checkGameOver();
+        testBoard.update();
         assertFalse(testBoard.isGameOver());
         assertEquals(0, testBoard.getGameOverCounter());
     }
 
     @Test
-    public void testLoadGame() {
+    public void testUpdateOnePassedTurn() {
+        // Sets up board - fill has no valid moves
+        for (int i = 0; i <= 23; i++) {
+            if (i != 7) {
+                setPiece(testBoard, i, FILL);
+            }
+        }
+        for (int i = 31; i <= 63; i += 8) {
+            setPiece(testBoard, i, CLEAR);
+        }
+        testBoard.setGameOverCounter(1);
+        testBoard.setTurn(FILL);
 
+        testBoard.update();
+
+        assertTrue(testBoard.isGameOver());
+    }
+
+    @Test
+    public void testUpdateHasValidMoves() {
+        testBoard.setUpGame();
+        testBoard.setGameOverCounter(1);
+
+        testBoard.update();
+
+        assertEquals(0, testBoard.getGameOverCounter());
     }
 
     @Test
@@ -575,10 +515,8 @@ public class GameBoardTest extends BoardTest {
         }
         // Simulates turn passing
         testBoard.setTurn(FILL);
-        assertFalse(testBoard.checkAnyValidMoves());
-        assertFalse(testBoard.checkAnyValidMoves());
+        testBoard.update();
 
-        testBoard.checkGameOver();
         assertTrue(testBoard.isGameOver());
         assertNull(testBoard.declareVictor());
     }
@@ -593,13 +531,11 @@ public class GameBoardTest extends BoardTest {
         }
         // Simulates turn passing
         testBoard.setTurn(FILL);
-        assertFalse(testBoard.checkAnyValidMoves());
-        assertFalse(testBoard.checkAnyValidMoves());
+        testBoard.update();
 
-        testBoard.checkGameOver();
         assertTrue(testBoard.isGameOver());
         countPieces(testBoard);
-        assertEquals(CLEAR, testBoard.declareVictor());
+        assertEquals("clear", testBoard.declareVictor());
         assertEquals(24, testBoard.getClearPieceCount());
         assertEquals(5, testBoard.getFillPieceCount());
     }
@@ -614,13 +550,11 @@ public class GameBoardTest extends BoardTest {
         }
         // Simulates turn passing
         testBoard.setTurn(FILL);
-        assertFalse(testBoard.checkAnyValidMoves());
-        assertFalse(testBoard.checkAnyValidMoves());
+        testBoard.update();
 
-        testBoard.checkGameOver();
         assertTrue(testBoard.isGameOver());
         countPieces(testBoard);
-        assertEquals(FILL, testBoard.declareVictor());
+        assertEquals("fill", testBoard.declareVictor());
         assertEquals(24, testBoard.getFillPieceCount());
         assertEquals(5, testBoard.getClearPieceCount());
     }

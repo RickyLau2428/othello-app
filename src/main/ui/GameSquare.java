@@ -1,8 +1,8 @@
 package ui;
 
-import javax.swing.*;
 import java.awt.*;
 
+// Represents a single square image on the game board in the GUI
 public class GameSquare {
     private Image pieceImage;
     private int positionX;

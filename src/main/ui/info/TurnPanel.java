@@ -1,30 +1,32 @@
 package ui.info;
 
+import model.GameBoard;
 import model.State;
-import ui.OthelloGame;
 
 import javax.swing.*;
 
 import java.awt.*;
 
 import static model.State.*;
+import static ui.info.InfoPanel.SECTION_HEIGHT;
+import static ui.info.InfoPanel.SECTION_WIDTH;
 
 // Container for information on current turn in GUI
 public class TurnPanel extends Information {
     private JLabel currTurn;
 
     // EFFECTS: Initializes the turn panel with the current turn
-    public TurnPanel(OthelloGame game, State turn) {
+    public TurnPanel(GameBoard game) {
         super(game, "Current turn: ");
-        initializeTurnLabel(turn);
+        initializeTurnLabel(game.getTurn());
     }
 
     // MODIFIES: this
-    // EFFECTS: Advances the turn label to the next turn
-    public void nextTurnLabel() {
-        if (currTurn.getText().equals("Clear")) {
+    // EFFECTS: Updates the turn label with the current turn
+    public void updateTurnLabel() {
+        if (game.getTurn().equals(FILL)) {
             currTurn.setText("Fill");
-        } else if (currTurn.getText().equals("Fill")) {
+        } else if (game.getTurn().equals(CLEAR)) {
             currTurn.setText("Clear");
         }
     }
@@ -37,8 +39,8 @@ public class TurnPanel extends Information {
         } else if (state.equals(FILL)) {
             currTurn = new JLabel("Fill");
         }
-        currTurn.setFont(new Font("Arial", Font.BOLD, 14));
-        currTurn.setBounds(0, 0, 300, 50);
+        currTurn.setFont(new Font("Arial", Font.BOLD, 20));
+        currTurn.setBounds(2, 0, SECTION_WIDTH, SECTION_HEIGHT / 2);
         container.add(currTurn);
     }
 
