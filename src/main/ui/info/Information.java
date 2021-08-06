@@ -5,11 +5,13 @@ import ui.OthelloGame;
 import javax.swing.*;
 import java.awt.*;
 
+// Abstract class for score and turn information panels
 public abstract class Information extends JPanel {
     protected OthelloGame game;
     protected JLabel title;
     protected JPanel container;
 
+    // EFFECTS: Creates a container that has a title on top of an to-be-specified information panel
     public Information(OthelloGame game, String titleText) {
         this.game = game;
         setPreferredSize(new Dimension(InfoPanel.SECTION_WIDTH, InfoPanel.SECTION_HEIGHT));

@@ -5,10 +5,6 @@ import model.GamePiece;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +31,6 @@ public class BoardRender extends JPanel {
         setBackground(Color.WHITE);
         board = new ArrayList<>(GameBoard.SIDE_LENGTH * GameBoard.SIDE_LENGTH);
         this.game = game;
-//        addMouseListener(this);
-//        addKeyListener(this);
     }
 
     // getters:

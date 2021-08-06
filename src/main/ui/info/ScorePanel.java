@@ -8,6 +8,7 @@ import java.awt.*;
 
 import static model.State.*;
 
+// Container for information on current score in GUI
 public class ScorePanel extends Information {
     public static final String CLEAR_SCORE_STARTER = "Clear's Score: ";
     public static final String FILL_SCORE_STARTER = "Fill's Score: ";
