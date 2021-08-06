@@ -136,12 +136,12 @@ public class GameBoard implements Writable {
 
     // MODIFIES: this
     // EFFECTS: Returns the winner of the match, or null if it is a tie.
-    public State declareVictor() {
-        State victor = null;
+    public String declareVictor() {
+        String victor = null;
         if (clearPieceCount > fillPieceCount) {
-            victor = CLEAR;
+            victor = "clear";
         } else if (fillPieceCount > clearPieceCount) {
-            victor = FILL;
+            victor = "fill";
         }
         return victor;
     }

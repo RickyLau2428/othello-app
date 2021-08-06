@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.Set;
 
 import static model.State.FILL;
 import static model.State.CLEAR;
@@ -282,13 +283,9 @@ public class OthelloGame {
                 + game.getClearPieceCount() + " for clear.");
     }
 
-    // EFFECTS: Prints all valid moves to console
-    private void displayValidMoves() {
-        System.out.print("Currently valid moves are: ");
-        for (int pos : game.getValidMoves().keySet()) {
-            System.out.print(game.indexToCommand(pos) + "; ");
-        }
-        System.out.println();
+    // EFFECTS: Returns all valid moves as positions on the board
+    public Set<Integer> displayValidMoves() {
+        return game.getValidMoves().keySet();
     }
 
     // MODIFIES: this
@@ -304,12 +301,12 @@ public class OthelloGame {
         System.out.println("The game is now over. Calculating score...");
         System.out.println("The final board state was: ");
         drawBoard.printBoard();
-        State victor = game.declareVictor();
+        String victor = game.declareVictor();
 
         System.out.println("The superior Othello player is...");
-        if (victor.equals(CLEAR)) {
+        if (victor.equals("clear")) {
             System.out.println("Clear! Congratulations!");
-        } else if (victor.equals(FILL)) {
+        } else if (victor.equals("fill")) {
             System.out.println("Fill! Congratulations!");
         } else {
             System.out.println("Neither of you! It's a tie - congrats to both players!");

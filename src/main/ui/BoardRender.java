@@ -5,6 +5,8 @@ import model.GamePiece;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -13,11 +15,15 @@ import java.util.Map;
 
 import static model.State.*;
 
-public class BoardRender extends JPanel implements MouseListener {
+public class BoardRender extends JPanel {
     public static final Image CLEAR_CIRCLE = new ImageIcon("./res/images/gamepiece/clearCircle.png").getImage();
     public static final Image FILL_CIRCLE = new ImageIcon("./res/images/gamepiece/fillCircle.png").getImage();
     public static final Image BLANK_SQUARE = new ImageIcon("./res/images/blankSquare.png").getImage();
     public static final Image HELP_ICON = new ImageIcon("./res/images/helpIcon.png").getImage();
+    public static final String OVER = "The winner is: ";
+    public static final String RESET = "Press [SPACE] to start another game.";
+
+    public final int boardLength = GameBoard.SIDE_LENGTH * BLANK_SQUARE.getWidth(this);
 
     private OthelloGame game;
     private List<GameSquare> board;
@@ -25,10 +31,17 @@ public class BoardRender extends JPanel implements MouseListener {
     public BoardRender(OthelloGame game) {
         super();
         setPreferredSize(sizeWindow());
+        setMinimumSize(sizeWindow());
         setBackground(Color.WHITE);
         board = new ArrayList<>(GameBoard.SIDE_LENGTH * GameBoard.SIDE_LENGTH);
         this.game = game;
-        addMouseListener(this);
+//        addMouseListener(this);
+//        addKeyListener(this);
+    }
+
+    // getters:
+    public List<GameSquare> getBoard() {
+        return board;
     }
 
     @Override
@@ -38,9 +51,15 @@ public class BoardRender extends JPanel implements MouseListener {
         updateBoard();
 
         drawBoard(g);
+
+        // TODO: Fix game end
+        if (game.getGame().isGameOver()) {
+            gameOver(g);
+        }
         g.dispose();
     }
 
+    // MODIFIES: g
     // EFFECTS: Prints the current board to the GUI
     private void drawBoard(Graphics g) {
         for (GameSquare gs : board) {
@@ -56,6 +75,37 @@ public class BoardRender extends JPanel implements MouseListener {
             setupBoard(game.getGame().getBoard());
         }
         updatePieces();
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Removes help icons from the board, if any
+    public void clearHelpIcons() {
+        for (GameSquare gs : board) {
+            if (gs.getPieceImage().equals(HELP_ICON)) {
+                gs.setPieceImage(BLANK_SQUARE);
+            }
+        }
+    }
+
+    // MODIFIES: g
+    // EFFECTS: Displays the winner of the match and replay instructions onto g
+    // Taken from SpaceInvadersRefactored at https://github.students.cs.ubc.ca/CPSC210/SpaceInvadersRefactored.git
+    private void gameOver(Graphics g) {
+        Color saved = g.getColor();
+        g.setColor(new Color(0, 0, 0));
+        g.setFont(new Font("Arial", Font.PLAIN, 20));
+        FontMetrics fm = g.getFontMetrics();
+        centreString(OVER + game.getGame().declareVictor(), g, fm, boardLength / 2);
+        centreString(RESET, g, fm, boardLength / 2 + 50);
+        g.setColor(saved);
+    }
+
+    // MODIFIES: g
+    // EFFECTS: Centres str horizontally at a height positionY
+    // Taken from SpaceInvadersRefactored at https://github.students.cs.ubc.ca/CPSC210/SpaceInvadersRefactored.git
+    private void centreString(String str, Graphics g, FontMetrics fm, int positionY) {
+        int width = fm.stringWidth(str);
+        g.drawString(str, boardLength - width / 2, positionY);
     }
 
     // MODIFIES: this
@@ -88,15 +138,6 @@ public class BoardRender extends JPanel implements MouseListener {
         }
     }
 
-    // EFFECTS: Calculates the position on the board based on the mouse position on release
-    private int calculateIndex(int positionX, int positionY) {
-        int col = positionX / BLANK_SQUARE.getWidth(this);
-        int row = positionY / BLANK_SQUARE.getHeight(this);
-
-        return (row * GameBoard.SIDE_LENGTH) + col;
-    }
-
-
     // MODIFIES: this
     // EFFECTS: Updates the board with all recently flipped/played pieces
     private void updatePieces() {
@@ -113,37 +154,9 @@ public class BoardRender extends JPanel implements MouseListener {
         }
     }
 
-
     // EFFECTS: Returns a Dimension scaled to one-third of the user's screen.
     private Dimension sizeWindow() {
         return new Dimension(BLANK_SQUARE.getWidth(this) * GameBoard.SIDE_LENGTH,
                 BLANK_SQUARE.getHeight(this) * GameBoard.SIDE_LENGTH);
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        // do nothing
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        // do nothing
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        int position = calculateIndex(e.getX(), e.getY());
-        game.getGame().placePiece(position);
-        repaint();
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        // do nothing
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        //do nothing
     }
 }
