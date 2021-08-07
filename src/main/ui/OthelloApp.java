@@ -1,5 +1,6 @@
 package ui;
 
+import javafx.scene.input.KeyCode;
 import model.GameBoard;
 import persistence.JsonReader;
 import persistence.JsonWriter;
@@ -84,26 +85,32 @@ public class OthelloApp extends JFrame {
         if (isNextTurn) {
             boardRender.playPlaceSound();
         }
-        updatePanels();
+        updateNextTurnPanels();
         repaint();
     }
 
     // MODIFIES: this
     // EFFECTS: Updates the board state and the info panels on the GUI after each turn
-    public void updatePanels() {
+    public void updateNextTurnPanels() {
         game.update();
         if (isNextTurn) {
             boardRender.clearHelpIcons();
-            info.getScorePanel().setTextScore(game.getFillPieceCount(), game.getClearPieceCount());
-            info.getTurnPanel().updateTurnLabel();
+            updateInformation();
         }
     }
 
     // MODIFIES: this
     // EFFECTS: Updates information panels with current state of game
-    public void updateInformation() {
+    public void updateCurrentState() {
         setGameInPanels(game);
         boardRender.setUpBoardImage(game.getBoard());
+        updateInformation();
+
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Updates the score and turn panels with the game's current state
+    private void updateInformation() {
         info.getScorePanel().setTextScore(game.getFillPieceCount(), game.getClearPieceCount());
         info.getTurnPanel().updateTurnLabel();
     }
@@ -124,7 +131,7 @@ public class OthelloApp extends JFrame {
             game = reader.read();
             game.setValidMoves();
             boardRender.reset();
-            updateInformation();
+            updateCurrentState();
             boardRender.repaint();
             info.repaint();
         } catch (IOException e) {

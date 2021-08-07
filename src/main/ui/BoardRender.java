@@ -22,6 +22,7 @@ public class BoardRender extends JPanel {
     public static final Image BLANK_SQUARE = new ImageIcon("./res/images/blankSquare.png").getImage();
     public static final Image HELP_ICON = new ImageIcon("./res/images/helpIcon.png").getImage();
     public static final String OVER = "The winner is: ";
+    public static final String RESET = "Press [R] to restart.";
 
     public final int boardLength = GameBoard.SIDE_LENGTH * BLANK_SQUARE.getWidth(this);
 
@@ -37,6 +38,7 @@ public class BoardRender extends JPanel {
         setPreferredSize(sizeWindow());
         setMinimumSize(sizeWindow());
         board = new ArrayList<>(GameBoard.SIDE_LENGTH * GameBoard.SIDE_LENGTH);
+        setFocusable(true);
     }
 
     // getters:
@@ -114,6 +116,7 @@ public class BoardRender extends JPanel {
         g.setFont(new Font("Arial", Font.BOLD, 35));
         FontMetrics fm = g.getFontMetrics();
         centreString(OVER + game.declareVictor(), g, fm, boardLength / 2);
+        centreString(RESET, g, fm, boardLength / 2 + 50);
         g.setColor(saved);
     }
 
@@ -157,6 +160,7 @@ public class BoardRender extends JPanel {
 
     // MODIFIES: this
     // EFFECTS: Plays the place sound from file when called
+    // Taken from https://stackoverflow.com/questions/6045384/playing-mp3-and-wav-in-java
     public void playPlaceSound() {
         try {
             audioInputStream = AudioSystem.getAudioInputStream(new File("./res/sounds/placeSound.wav"));
