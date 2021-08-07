@@ -3,8 +3,12 @@ package ui;
 import model.GameBoard;
 import model.GamePiece;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +27,8 @@ public class BoardRender extends JPanel {
 
     private GameBoard game;
     private List<GameSquare> board;
+    private AudioInputStream audioInputStream;
+    private Clip placeSound;
 
     // EFFECTS: Initializes a board to render with the appropriate size and colour
     public BoardRender(GameBoard game) {
@@ -30,7 +36,6 @@ public class BoardRender extends JPanel {
         this.game = game;
         setPreferredSize(sizeWindow());
         setMinimumSize(sizeWindow());
-        setBackground(Color.WHITE);
         board = new ArrayList<>(GameBoard.SIDE_LENGTH * GameBoard.SIDE_LENGTH);
     }
 
@@ -147,6 +152,19 @@ public class BoardRender extends JPanel {
                     board.get(i).setPieceImage(FILL_CIRCLE);
                 }
             }
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Plays the place sound from file when called
+    public void playPlaceSound() {
+        try {
+            audioInputStream = AudioSystem.getAudioInputStream(new File("./res/sounds/placeSound.wav"));
+            placeSound = AudioSystem.getClip();
+            placeSound.open(audioInputStream);
+            placeSound.start();
+        } catch (Exception e) {
+            System.out.println("Error playing place sound.");
         }
     }
 

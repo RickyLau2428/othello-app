@@ -81,6 +81,9 @@ public class OthelloApp extends JFrame {
     public void placePieceOnBoard(int positionX, int positionY) {
         int position = calculateIndex(positionX, positionY);
         isNextTurn = game.placePiece(position);
+        if (isNextTurn) {
+            boardRender.playPlaceSound();
+        }
         updatePanels();
         repaint();
     }
