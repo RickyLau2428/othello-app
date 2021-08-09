@@ -9,8 +9,7 @@ played on a computer, faithful to the original rules as provided by the World Ot
 As a quick summary, my application will be able to: 
 * Do whatever an Othello board can do and **more**.
 * Store a current game to be finished at another time.
-* Upon request, provide a list of all valid moves that can be taken.  
-* (Pending - more things to be added as I think of them)
+* Upon request, provide a list of all valid moves that can be taken.
 
 ## Who is this for?
 My application can be used by absolutely anybody who has an interest in playing Othello, from those who have never 
