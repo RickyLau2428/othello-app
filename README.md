@@ -30,3 +30,11 @@ played the game before, but I felt that it translated into a program fairly well
 * As a user, I want to be able to save an ongoing match to file.
 * As a user, I want to be able to load an ongoing match from file.
 * As a user, I want to be able to save/load multiple games to/from file.
+
+## Phase 4: Task 2
+**Chosen option:** Test and design a class in your model package that is robust.
+ * **Class with exception:** Some methods in Cursor throws IllegalCursorException
+    * **Methods:** setPosition, moveCursorRight, moveCursorLeft, moveCursorDown, moveCursorUp, 
+      moveCursorUpperRight, moveCursorLowerRight, moveCursorUpperLeft, moveCursorLowerLeft
+    * **Tests for exceptions:** See unit tests in CursorTest (e.g. testMoveCursorRightNothingThrown, 
+      testMoveCursorRightBorderException, testMoveCursorRightWrapAroundException)
