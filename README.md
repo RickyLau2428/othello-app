@@ -14,7 +14,7 @@ As a quick summary, my application will be able to:
 ## Who is this for?
 My application can be used by absolutely anybody who has an interest in playing Othello, from those who have never 
 heard of it to veteran players. As long as you have two players (or maybe just one if you enjoy playing
-against yourself), this application will satisfy *most* of your Othello needs.
+against yourself), this application will satisfy most of your Othello needs.
 
 ## Why Othello?
 I was inspired to design my project around Othello by watching gameplay on YouTube. To be completely frank, I've never 
@@ -38,3 +38,26 @@ played the game before, but I felt that it translated into a program fairly well
       moveCursorUpperRight, moveCursorLowerRight, moveCursorUpperLeft, moveCursorLowerLeft
     * **Tests for exceptions:** See unit tests in CursorTest (e.g. testMoveCursorRightNothingThrown, 
       testMoveCursorRightBorderException, testMoveCursorRightWrapAroundException)
+      
+
+## Phase 4: Task 3
+Given more time to work on the project, there are a number of things I'd like to improve:
+<ol>
+<li>Implement the Observer design pattern to reduce the number of associations leading to GameBoard from classes
+in the ui package. </li>
+<ul>
+<li>Observers would be the GUI components, and the Subject would be GameBoard.</li>
+</ul>
+<li>Increase cohesion of code by splitting up the GameBoard class.</li>
+<ul>
+<li>GameBoard currently violates the Single Responsibility Principle - it is tasked with placing the pieces, 
+generating valid moves, and checking for the game's end.</li>
+<li>I would refactor it by splitting GameBoard into 4 separate classes:</li>
+<ul>
+<li>PiecePlacer (for placing the pieces on the board and updating other classes)</li>
+<li>ValidMoveGenerator (for generating all valid moves).</li>
+<li>GameEnder (for checking game-ending conditions).</li>
+<li>GameBoardManager (for managing the entirety of the GameBoard).</li>
+</ul>
+</ul>
+</ol>

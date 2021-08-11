@@ -244,7 +244,7 @@ public class GameBoard implements Writable {
     // MODIFIES: this
     // EFFECTS: Checks all pieces leading from cursor and adds any valid moves to validMoves. Resets the cursor
     //          if it attempts to move illegally.
-    public void checkDirection(State turn, int direction) {
+    private void checkDirection(State turn, int direction) {
         try {
             Set<GamePiece> potentialFlips = new HashSet<>();
             moveCursorDirection(direction);
