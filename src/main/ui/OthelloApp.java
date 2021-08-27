@@ -27,7 +27,7 @@ public class OthelloApp extends JFrame {
 
     // EFFECTS: Creates the window in which the game is played
     public OthelloApp() {
-        super("IoMoth's Implementation of Othello");
+        super("A Simple Implementation of Othello");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setIconImage(new ImageIcon("./res/images/icon.png").getImage());
         setResizable(false);
